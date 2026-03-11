@@ -7,6 +7,7 @@ import seedu.duke.command.Command;
 import seedu.duke.module.Module;
 import seedu.duke.module.ModuleList;
 import seedu.duke.parser.Parser;
+import seedu.duke.ui.UI;
 
 public class PathLock {
     /**
@@ -17,33 +18,37 @@ public class PathLock {
         Scanner scanner = new Scanner(System.in);
         ModuleList modules = new ModuleList(new ArrayList<Module>());
 
-        System.out.println("Welcome to the CEG Module Planner!");
-        System.out.println("Type a command:");
-
+        UI.opening();
         while (true) {
+            UI.userPrompt();
 
             String input = scanner.nextLine().trim();
 
-            if (input.equalsIgnoreCase("bye")) {
-                System.out.println("Goodbye!");
+            if (input.equalsIgnoreCase("exit")) {
+                UI.closing();
                 break;
             }
 
-            Command command = Parser.parseCommand(input);
-
-            if (command == null) {
-                System.out.println("Unknown command.");
-                continue;
+            else if (input.equalsIgnoreCase("help")) {
+                UI.help();
             }
 
-            try {
-                String result = command.execute(modules);
-                System.out.println(result);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            else {
+                Command command = Parser.parseCommand(input);
+
+                if (command == null) {
+                    UI.unknownCommand();
+                    continue;
+                }
+
+                try {
+                    String result = command.execute(modules);
+                    System.out.println(result);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
-
         scanner.close();
     }
 }
