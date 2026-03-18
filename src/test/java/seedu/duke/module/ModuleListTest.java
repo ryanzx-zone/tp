@@ -139,6 +139,96 @@ public class ModuleListTest {
         assertFalse(result.contains("CS2113"));
     }
 
+
+    @Test
+    public void getMcForModule_twoMcModule_returnsTwo() {
+        assertEquals(2, ModuleList.getMcForModule("MA1512"));
+        assertEquals(2, ModuleList.getMcForModule("CG2027"));
+        assertEquals(2, ModuleList.getMcForModule("EG2401A"));
+    }
+
+    @Test
+    public void getMcForModule_fourMcModule_returnsFour() {
+        assertEquals(4, ModuleList.getMcForModule("CS2113"));
+        assertEquals(4, ModuleList.getMcForModule("CG2271"));
+        assertEquals(4, ModuleList.getMcForModule("EE2026"));
+    }
+
+    @Test
+    public void getMcForModule_eightMcModule_returnsEight() {
+        assertEquals(8, ModuleList.getMcForModule("CG4002"));
+        assertEquals(8, ModuleList.getMcForModule("CP4106"));
+    }
+
+    @Test
+    public void getMcForModule_tenMcModule_returnsTen() {
+        assertEquals(10, ModuleList.getMcForModule("CP3880"));
+        assertEquals(10, ModuleList.getMcForModule("EG3611A"));
+    }
+
+    @Test
+    public void getMcForModule_lowercaseInput_returnsCorrectMc() {
+        assertEquals(2, ModuleList.getMcForModule("ma1511"));
+        assertEquals(4, ModuleList.getMcForModule("cs2113"));
+    }
+
+    @Test
+    public void countMcs_emptyList_showsZeroPercentage() {
+        ModuleList ml = new ModuleList(new ArrayList<>());
+        String result = ml.countMcs();
+        assertTrue(result.contains("0.0%"));
+        assertTrue(result.contains("Incomplete: 80 MCs"));
+    }
+
+    @Test
+    public void countMcs_multipleModules_showsCorrectPercentage() throws DuplicateException {
+        ModuleList ml = new ModuleList(new ArrayList<>());
+        ml.addModule(new Module("MA1511", 2));
+        ml.addModule(new Module("MA1512", 2));
+        ml.addModule(new Module("CS2113", 4));
+        ml.addModule(new Module("CG4002", 8));
+        String result = ml.countMcs();
+        assertTrue(result.contains("Completed: 16 / 80 MCs (20.0%)"));
+        assertTrue(result.contains("Incomplete: 64 MCs (80.0%)"));
+    }
+
+    @Test
+    public void countMcs_manyModules_showsCorrectMcs() throws DuplicateException {
+        ModuleList ml = new ModuleList(new ArrayList<>());
+        ml.addModule(new Module("CP3880", 10));
+        ml.addModule(new Module("CG4002", 8));
+        ml.addModule(new Module("CS2113", 4));
+        ml.addModule(new Module("CS2040C", 4));
+        ml.addModule(new Module("CS2107", 4));
+        ml.addModule(new Module("CG2271", 4));
+        ml.addModule(new Module("CG2023", 4));
+        ml.addModule(new Module("CS1231", 4));
+        String result = ml.countMcs();
+        assertTrue(result.contains("Completed: 42 / 80 MCs"));
+    }
+
+    @Test
+    public void countMcs_afterRemovingModule_updatesCorrectly() throws DuplicateException {
+        ModuleList ml = new ModuleList(new ArrayList<>());
+        ml.addModule(new Module("CS2113", 4));
+        ml.addModule(new Module("MA1511", 2));
+        ml.removeModule("CS2113");
+        String result = ml.countMcs();
+        assertTrue(result.contains("Completed: 2 / 80 MCs"));
+        assertTrue(result.contains("2.5%"));
+    }
+
+    @Test
+    public void countMcs_remainingMcsNeverNegative() {
+        ArrayList<Module> modules = new ArrayList<>();
+        Module m1 = new Module("CS2113", 90);
+        m1.markCompleted();
+        modules.add(m1);
+        ModuleList ml = new ModuleList(modules);
+        String result = ml.countMcs();
+        assertTrue(result.contains("Incomplete: 0 MCs"));
+    }
+
     @Test
     public void listNeededModules_always_containsRequiredModules() {
         ModuleList ml = new ModuleList(new ArrayList<>());
