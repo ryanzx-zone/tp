@@ -7,7 +7,7 @@ import java.io.IOException;
 public class RemoveCommand extends Command {
     private final String moduleCode;
     public RemoveCommand(String moduleCode) {
-        this.moduleCode = moduleCode;
+        this.moduleCode = moduleCode.toUpperCase();
     }
 
     @Override

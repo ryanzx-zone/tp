@@ -153,6 +153,12 @@ public class ModuleList {
         return false;
     }
 
+    /**
+     * Returns a list of completed modules.
+     *
+     * @return A numbered list of completed modules or a message
+     *         indicating that no modules have been completed.
+     */
     public String listCompletedModules() {
         if (completedModules.isEmpty()) {
             return "No modules completed yet.";
@@ -168,6 +174,12 @@ public class ModuleList {
         return completedModulesList.toString().trim();
     }
 
+    /**
+     * Returns a list of all modules required for graduation.
+     *
+     * @return A numbered list of required modules and OR module groups
+     *         that are needed for graduation.
+     */
     public String listNeededModules() {
         StringBuilder neededModulesList = new StringBuilder("Modules required for graduation:\n");
         int index = 1;
@@ -205,6 +217,16 @@ public class ModuleList {
                 remainingMcs, remainingPercentage);
     }
 
+    /**
+     * Returns a list of required modules that have not yet been completed.
+     *
+     * Modules already marked as completed will not appear in the list.
+     * OR module groups are considered completed if any module in the group
+     * has been completed.
+     *
+     * @return A numbered list of incomplete modules or a message indicating
+     *         that all required modules have been completed.
+     */
     public String listIncompleteModules() {
         List<String> incompleteModules = new ArrayList<>();
 

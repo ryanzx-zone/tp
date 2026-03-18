@@ -2,10 +2,8 @@ package seedu.duke;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import java.io.IOException;
 import seedu.duke.command.Command;
-import seedu.duke.module.Module;
 import seedu.duke.module.ModuleList;
 import seedu.duke.parser.Parser;
 import seedu.duke.ui.UI;
@@ -14,6 +12,7 @@ public class PathLock {
     /**
      * Main entry-point for the PathLock application.
      */
+    @SuppressWarnings("checkstyle:RightCurly")
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -30,18 +29,18 @@ public class PathLock {
         while (true) {
             UI.userPrompt();
 
+            if (!scanner.hasNextLine()){
+                break;
+            }
+
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("exit")) {
                 UI.closing();
                 break;
-            }
-
-            else if (input.equalsIgnoreCase("help")) {
+            } else if (input.equalsIgnoreCase("help")) {
                 UI.help();
-            }
-
-            else {
+            } else {
                 Command command = Parser.parseCommand(input);
 
                 if (command == null) {

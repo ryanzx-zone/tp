@@ -1,12 +1,13 @@
 package seedu.duke.storage;
 
-import java.io.IOException;
-import seedu.duke.module.Module;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import seedu.duke.module.Module;
 
 public class Storage {
     private static final String filePath = "data/duke.txt";
