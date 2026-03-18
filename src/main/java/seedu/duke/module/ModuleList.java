@@ -5,10 +5,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import seedu.duke.exception.DuplicateException;
 
 public class ModuleList {
+
+    private static final Logger logger = Logger.getLogger(ModuleList.class.getName());
 
     private static final int TOTAL_GRADUATION_MCS = 80;
 
@@ -80,7 +84,13 @@ public class ModuleList {
      * @return MC value, or 4 as default if not found.
      */
     public static int getMcForModule(String moduleCode) {
-        return MODULE_MC_MAP.getOrDefault(moduleCode.toUpperCase(), 4);
+        assert moduleCode != null : "Module code should not be null";
+        assert !moduleCode.trim().isEmpty() : "Module code should not be empty";
+        int mc = MODULE_MC_MAP.getOrDefault(moduleCode.toUpperCase(), 4);
+        assert mc > 0 : "MC value should be positive";
+        logger.log(Level.INFO, "Retrieved MC for {0}: {1}",
+                new Object[]{moduleCode.toUpperCase(), mc});
+        return mc;
     }
 
     public static int getTotalGraduationMcs() {
