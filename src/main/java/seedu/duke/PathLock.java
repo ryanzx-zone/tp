@@ -27,25 +27,22 @@ public class PathLock {
             if (input.equalsIgnoreCase("exit")) {
                 UI.closing();
                 break;
-            }
-
-            else if (input.equalsIgnoreCase("help")) {
+            } else if (input.equalsIgnoreCase("help")) {
                 UI.help();
-            }
-
-            else {
-                Command command = Parser.parseCommand(input);
-
-                if (command == null) {
-                    UI.unknownCommand();
-                    continue;
-                }
-
+            } else {
                 try {
+                    Command command = Parser.parseCommand(input);
+
+                    if (command == null) {
+                        UI.unknownCommand();
+                        continue;
+                    }
+
                     String result = command.execute(modules);
                     System.out.println(result);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
+                    UI.dash();
                 }
             }
         }
