@@ -19,7 +19,7 @@ public class ListIncompleteCommand extends Command {
         String result = modules.listIncompleteModules();
 
         // Logs that the command finished successfully
-        logger.log(Level.INFO, "Incomplete modules listed successfully");
+        logger.log(Level.FINE, "Incomplete modules listed successfully");
 
         return result;
     }

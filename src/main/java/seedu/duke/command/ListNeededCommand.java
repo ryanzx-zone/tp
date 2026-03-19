@@ -19,7 +19,7 @@ public class ListNeededCommand extends Command {
         String result = modules.listNeededModules();
 
         // Logs that the command finished successfully
-        logger.log(Level.INFO, "Required modules listed successfully");
+        logger.log(Level.FINE, "Required modules listed successfully");
 
         return result;
     }

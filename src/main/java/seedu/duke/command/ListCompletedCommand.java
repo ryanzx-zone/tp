@@ -19,7 +19,7 @@ public class ListCompletedCommand extends Command {
         String result = modules.listCompletedModules();
 
         // Logs that the command finished successfully
-        logger.log(Level.INFO, "Completed modules listed successfully");
+        logger.log(Level.FINE, "Completed modules listed successfully");
 
         return result;
     }
