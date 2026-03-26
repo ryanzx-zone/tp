@@ -7,19 +7,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 import seedu.duke.module.Module;
 
 public class Storage {
-    private static final String filePath = "data/duke.txt";
+    private static final Logger logger = Logger.getLogger(Storage.class.getName());
+    private static String filePath;
+
+    public Storage() {
+        this("data/duke.txt"); // default
+    }
+
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
 
     public List<Module> load() throws IOException {
 
         File file = new File(filePath);
 
-        file.getParentFile().mkdirs();
+        logger.info("Loading modules from file: " + filePath);
+
+        File parent = file.getParentFile();
+        assert parent != null : "Parent directory should exist for file path";
+        parent.mkdirs();
 
         if (!file.exists()) {
             file.createNewFile();
+            logger.warning("Save file not found. Created new file at " + filePath);
         }
 
         List<Module> modules = new ArrayList<>();
@@ -27,15 +45,23 @@ public class Storage {
         Scanner scanner = new Scanner(file);
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
+            logger.log(Level.FINE, "Reading line: {0}", line);
+
+            assert !line.isBlank() : "Line in storage file should not be blank";
 
             String[] parts = line.split("\\|");
+            assert parts.length == 2 : "Each line must have exactly 2 fields: " + line;
 
-            String code = parts[0];
-            int mc = Integer.parseInt(parts[1]);
+            String code = parts[0].trim();
+            assert !code.isEmpty() : "Module code should not be empty";
+
+            int mc = Integer.parseInt(parts[1].trim());
+            assert mc > 0 : "Modular credits should be positive";
 
             Module module = new Module(code, mc);
-            module.markCompleted();
+            assert module != null : "Module object should be created successfully";
 
+            module.markCompleted();
             modules.add(module);
         }
         scanner.close();
