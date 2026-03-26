@@ -1,14 +1,18 @@
 package seedu.duke.module;
 
+import seedu.duke.Planner.ModuleStatus;
+
 public class Module {
     private final String moduleCode;
     private final int modularCredits;
-    private boolean isCompleted;
+    private ModuleStatus Status;
+    private String semester;
 
     public Module(String moduleCode, int modularCredits) {
         this.moduleCode = moduleCode;
         this.modularCredits = modularCredits;
-        this.isCompleted = false;
+        this.Status = ModuleStatus.UNPLANNED;
+        this.semester = "";
     }
 
     public String getModuleCode() {

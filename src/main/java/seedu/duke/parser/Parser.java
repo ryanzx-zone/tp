@@ -45,6 +45,13 @@ public class Parser {
             return new RemoveCommand(moduleCode);
         }
 
+        if (input.startsWith("y")) {
+            String semester = input.substring(0, 3);
+            String moduleCode = input.substring(5).trim();
+            return new AddToPlannerCommand(moduleCode,semester);
+
+        }
+
         return null;
     }
 }
