@@ -9,7 +9,7 @@ public class RemoveCommandTest {
     public void execute_existingModule_removedSuccessfully() {
         ModuleList modules = new ModuleList();
 
-        DoneCommand doneCommand = new DoneCommand("CS1231");
+        DoneCommand doneCommand = new DoneCommand("CS1231",4);
         doneCommand.execute(modules);
 
         RemoveCommand removeCommand = new RemoveCommand("CS1231");
@@ -32,7 +32,7 @@ public class RemoveCommandTest {
     @Test
     public void execute_lowercaseInput_convertedToUppercase() {
         ModuleList modules = new ModuleList();
-        DoneCommand doneCommand = new DoneCommand("CS1231");
+        DoneCommand doneCommand = new DoneCommand("CS1231", 4);
         doneCommand.execute(modules);
 
         RemoveCommand removeCommand = new RemoveCommand("cs1231");

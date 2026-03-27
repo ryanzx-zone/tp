@@ -1,6 +1,7 @@
 package seedu.duke.module;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -15,6 +16,7 @@ public class ModuleList {
     private static final int TOTAL_GRADUATION_MCS = 160;
 
     private final Map<String, Module> allModules;
+    private final Map<String, Module> externalModules = new LinkedHashMap<>();
 
     public ModuleList() {
         this.allModules = ModuleLoader.loadModules();
@@ -37,12 +39,26 @@ public class ModuleList {
     public int getMcForModule(String moduleCode) {
         assert moduleCode != null : "Module code should not be null";
         assert !moduleCode.trim().isEmpty() : "Module code should not be empty";
-        Module module = allModules.get(moduleCode.toUpperCase());
-        int mc = (module != null) ? module.getModularCredits() : 4;
-        assert mc > 0 : "MC value should be positive";
-        logger.log(Level.INFO, "Retrieved MC for {0}: {1}",
-                new Object[]{moduleCode.toUpperCase(), mc});
-        return mc;
+
+        String code = moduleCode.toUpperCase();
+
+        Module internal = allModules.get(code);
+        if (internal != null){
+            int mc = internal.getModularCredits();
+            assert mc >= 0 : "MC value should be positive";
+            logger.log(Level.INFO, "Retrieved MC for {0}: {1}", new Object[]{code, mc});
+            return mc;
+        }
+
+        Module external = externalModules.get(code);
+        if (external != null) {
+            int mc =  external.getModularCredits();
+            logger.log(Level.INFO, "Retrieved MC for external module {0}: {1}",
+                    new Object[]{code, external.getModularCredits()});
+            return mc;
+        }
+
+        throw new IllegalArgumentException("\"" + code + "\" is not a recognised module.");
     }
 
     public static int getTotalGraduationMcs() {
@@ -50,9 +66,10 @@ public class ModuleList {
     }
 
     /**
-     * Checks if the given module code is a recognised required module.
+     * Checks if the given module code is a recognized required module.
      */
-    private boolean isRecognisedModule(String moduleCode) {
+    public boolean isRecognisedModule(String moduleCode) {
+        assert moduleCode != null : "moduleCode cannot be null";
         return allModules.containsKey(moduleCode.toUpperCase());
     }
 
@@ -84,6 +101,23 @@ public class ModuleList {
      */
     public void addModule(Module newModule) throws DuplicateException {
         addModule(newModule.getModuleCode());
+    }
+
+    public void addExternalModule(String moduleCode, int mc) throws DuplicateException {
+        assert moduleCode != null && !moduleCode.isBlank() : "moduleCode must not be null or blank";
+        assert mc > 0 : "MC must be positive";
+
+        String code = moduleCode.toUpperCase();
+        logger.log(Level.FINE, "Attempting to add external module: {0} (MC={1})",
+                new Object[]{code, mc});
+
+        if (externalModules.containsKey(code)) {
+            logger.log(Level.WARNING, "Duplicate external module: {0}", code);
+            throw new DuplicateException(code);
+        }
+
+        externalModules.put(code, new Module(code, mc));
+        logger.log(Level.FINE, "External module added: {0} (MC={1})", new Object[]{code, mc});
     }
 
     public boolean removeModule(String moduleCode) {
@@ -190,12 +224,12 @@ public class ModuleList {
                 completedMcs += module.getModularCredits();
             }
         }
+
         assert completedMcs >= 0 : "Completed MCs should not be negative";
         int remainingMcs = TOTAL_GRADUATION_MCS - completedMcs;
         if (remainingMcs < 0) {
             remainingMcs = 0;
         }
-        assert remainingMcs >= 0 : "Remaining MCs should not be negative";
         double percentage = (double) completedMcs / TOTAL_GRADUATION_MCS * 100;
         double remainingPercentage = 100.0 - percentage;
 

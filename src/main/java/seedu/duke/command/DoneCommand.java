@@ -1,5 +1,6 @@
 package seedu.duke.command;
 
+import seedu.duke.module.ModuleValidator;
 import seedu.duke.module.ModuleList;
 import seedu.duke.exception.DuplicateException;
 import seedu.duke.storage.Storage;
@@ -9,11 +10,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DoneCommand extends Command {
-    private final String moduleCode;
+
     private final Logger logger = Logger.getLogger(DoneCommand.class.getName());
 
-    public DoneCommand(String moduleCode) {
+    private final String moduleCode;
+    private final Integer mc;
+
+    public DoneCommand(String moduleCode, Integer mc) {
         this.moduleCode = moduleCode.toUpperCase();
+        this.mc = mc;
     }
 
     @Override
@@ -21,18 +26,20 @@ public class DoneCommand extends Command {
         assert modules != null : "ModuleList should not be null";
         assert moduleCode != null && !moduleCode.isEmpty() : "ModuleCode should not be null";
 
-        logger.log(Level.FINE, "Executing DoneCommand for {0}", moduleCode);
+        logger.log(Level.FINE, "Executing DoneCommand for {0} , mc={1}", new Object[]{moduleCode, mc});
 
         try {
-            modules.addModule(moduleCode);
-            int mc = modules.getMcForModule(moduleCode);
-            logger.log(Level.FINE, "Module added: {0} (MC={1})", new Object[]{moduleCode, mc});
+            ModuleValidator.validateModuleCode(moduleCode);
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
 
-            Storage.save(modules.getCompletedModules());
-            logger.log(Level.FINE, "Storage updated after adding module: {0}", moduleCode);
-
-            return moduleCode + " has been added";
-
+        try {
+            if (modules.isRecognisedModule(moduleCode)) {
+                return handleInternalModule(modules);
+            } else {
+                return handleExternalModule(modules);
+            }
         } catch (DuplicateException e) {
             logger.log(Level.WARNING, "Duplicate module code: {0}", moduleCode);
             return e.getMessage();
@@ -46,5 +53,37 @@ public class DoneCommand extends Command {
             throw new RuntimeException(e);
         }
     }
+
+    private String handleInternalModule(ModuleList modules) throws DuplicateException, IOException {
+        int expectedMc = modules.getMcForModule(moduleCode);
+
+        ModuleValidator.validateInternalMc(mc, expectedMc, moduleCode);
+
+        modules.addModule(moduleCode);
+        Storage.save(modules.getCompletedModules());
+
+        logger.log(Level.FINE, "Internal module added: {0} ({1} MCs)",
+                new Object[]{moduleCode, expectedMc});
+        return moduleCode + " has been added (" + expectedMc + " MCs).";
+    }
+
+
+    private String handleExternalModule(ModuleList modules) throws DuplicateException, IOException {
+        if (mc == null) {
+            return "\"" + moduleCode + "\" is not a recognised module. "
+                    + "If this is an external module, provide its MCs using /mc. "
+                    + "Example: done " + moduleCode + " /mc 4";
+        }
+
+        ModuleValidator.validateMc(mc);
+
+        modules.addExternalModule(moduleCode, mc);
+        Storage.save(modules.getCompletedModules());
+
+        logger.log(Level.FINE, "External module added: {0} ({1} MCs)",
+                new Object[]{moduleCode, mc});
+        return moduleCode + " has been added as an external module (" + mc + " MCs).";
+    }
+
 
 }

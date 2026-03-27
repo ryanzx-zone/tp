@@ -3,7 +3,7 @@ package seedu.duke.module;
 import org.junit.jupiter.api.Test;
 import seedu.duke.exception.DuplicateException;
 
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -113,8 +113,12 @@ public class ModuleListTest {
     }
 
     @Test
-    public void getMcForModule_unknownModule_returnsDefaultFour() {
-        assertEquals(4, new ModuleList().getMcForModule("UNKNOWN1234"));
+    public void getMcForModule_unknownModule_throwsException() {
+        ModuleList moduleList = new ModuleList();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            moduleList.getMcForModule("UNKNOWN1234");
+        });
     }
 
     @Test
