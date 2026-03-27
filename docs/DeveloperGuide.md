@@ -8,6 +8,21 @@
 
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
+### Command component
+API: Command.java
+
+{insert UML diagram here}
+
+How the `Command` Component work:
+1. When the user enters a command, the `Command` component identifies the type of command and creates the corresponding Command object.
+2. This command is represented as a subclass of `Command`, such as `DoneCommand`, `RemoveCommand`, `CountCommand`, `ListCompletedCommand`, `ListIncompleteCommand`, `ListNeededCommand`, or `AddToPlannerCommand`.
+3. The selected command is then executed by calling its `execute(ModuleList modules)` method. During execution, the command interacts with the ModuleList to retrieve, add, remove, or count modules. For example:
+- `DoneCommand` adds a completed module to the list and saves the updated data to storage.
+- `RemoveCommand` removes a module from the list and saves the updated data to storage.
+- `CountCommand` retrieves the total number of MCs completed.
+- `ListCompletedCommand`, `ListIncompleteCommand`, and `ListNeededCommand` retrieve different filtered views of the module list. 
+4. After execution, the command returns a String result, which is then shown to the user as the system response. This is evident from the shared method signature in Command and the implementations in each subclass.
+
 ### Storage component
 API: Storage.java
 
@@ -17,7 +32,7 @@ The storage component,
 
 can save current completed mods as well as planned mods in a text file
 
-It can also create more then one list for different users
+It can also create more than one list for different users
 
 different user can also have different iteration of their plan
 
