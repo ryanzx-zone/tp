@@ -47,26 +47,32 @@ public class Storage {
             String line = scanner.nextLine();
             logger.log(Level.FINE, "Reading line: {0}", line);
 
-            assert !line.isBlank() : "Line in storage file should not be blank";
-
-            String[] parts = line.split("\\|");
-            assert parts.length == 2 : "Each line must have exactly 2 fields: " + line;
-
-            String code = parts[0].trim();
-            assert !code.isEmpty() : "Module code should not be empty";
-
-            int mc = Integer.parseInt(parts[1].trim());
-            assert mc > 0 : "Modular credits should be positive";
-
-            Module module = new Module(code, mc);
-            assert module != null : "Module object should be created successfully";
-
-            module.markCompleted();
+            Module module = getModule(line);
             modules.add(module);
         }
         scanner.close();
         return modules;
     }
+
+    private static Module getModule(String line) {
+        assert !line.isBlank() : "Line in storage file should not be blank";
+
+        String[] parts = line.split("\\|");
+        assert parts.length == 2 : "Each line must have exactly 2 fields: " + line;
+
+        String code = parts[0].trim();
+        assert !code.isEmpty() : "Module code should not be empty";
+
+        int mc = Integer.parseInt(parts[1].trim());
+        assert mc > 0 : "Modular credits should be positive";
+
+        Module module = new Module(code, mc);
+        assert module != null : "Module object should be created successfully";
+
+        module.markCompleted();
+        return module;
+    }
+
     public static void save(List<Module> modules) throws IOException {
 
         FileWriter writer = new FileWriter(filePath);
