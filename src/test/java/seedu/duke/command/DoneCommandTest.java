@@ -8,7 +8,7 @@ public class DoneCommandTest {
     @Test
     public void execute_validModule_success() {
         ModuleList modules = new ModuleList();
-        DoneCommand command = new DoneCommand("CS1231");
+        DoneCommand command = new DoneCommand("CS1231", 4);
 
         String result = command.execute(modules);
 
@@ -20,7 +20,7 @@ public class DoneCommandTest {
     public void execute_lowercaseInput_convertedToUppercase() {
         ModuleList modules = new ModuleList();
 
-        DoneCommand command = new DoneCommand("cs1231");
+        DoneCommand command = new DoneCommand("cs1231", 4);
         String result = command.execute(modules);
 
         assertEquals("CS1231 has been added", result);
