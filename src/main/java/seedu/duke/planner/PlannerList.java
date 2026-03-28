@@ -1,7 +1,6 @@
 package seedu.duke.planner;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import seedu.duke.module.Module;
 public class PlannerList {
@@ -48,11 +47,9 @@ public class PlannerList {
             break;
         case "y4s2": course.get(7).add(module);
             break;
+        default:
+            break;
         }
     }
-/**
-    public findModule();
-    public editModule();
-    public removeModule();
- **/
+    // TODO: findModule(), editModule(), removeModule()
 }

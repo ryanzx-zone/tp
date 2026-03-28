@@ -1,16 +1,19 @@
 package seedu.duke.command;
 
 import org.junit.jupiter.api.Test;
+import seedu.duke.appState.AppState;
 import seedu.duke.module.ModuleList;
+import seedu.duke.planner.PlannerList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DoneCommandTest {
     @Test
     public void execute_validModule_success() {
         ModuleList modules = new ModuleList();
+        AppState state = new AppState(modules, new PlannerList());
         DoneCommand command = new DoneCommand("CS1231", 4);
 
-        String result = command.execute(modules);
+        String result = command.execute(state);
 
         assertEquals("CS1231 has been added (4 MCs).", result);
         assertEquals(1, modules.getCompletedModules().size());
@@ -19,9 +22,10 @@ public class DoneCommandTest {
     @Test
     public void execute_lowercaseInput_convertedToUppercase() {
         ModuleList modules = new ModuleList();
+        AppState state = new AppState(modules, new PlannerList());
 
         DoneCommand command = new DoneCommand("cs1231", 4);
-        String result = command.execute(modules);
+        String result = command.execute(state);
 
         assertEquals("CS1231 has been added (4 MCs).", result);
     }

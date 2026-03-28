@@ -1,19 +1,22 @@
 package seedu.duke.command;
 
 import org.junit.jupiter.api.Test;
+import seedu.duke.appState.AppState;
 import seedu.duke.module.ModuleList;
+import seedu.duke.planner.PlannerList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RemoveCommandTest {
     @Test
     public void execute_existingModule_removedSuccessfully() {
         ModuleList modules = new ModuleList();
+        AppState state = new AppState(modules, new PlannerList());
 
         DoneCommand doneCommand = new DoneCommand("CS1231",4);
-        doneCommand.execute(modules);
+        doneCommand.execute(state);
 
         RemoveCommand removeCommand = new RemoveCommand("CS1231");
-        String result = removeCommand.execute(modules);
+        String result = removeCommand.execute(state);
 
         assertEquals("CS1231 has been removed", result);
         assertEquals(0, modules.getCompletedModules().size());
@@ -22,9 +25,10 @@ public class RemoveCommandTest {
     @Test
     public void execute_moduleNotInList_returnsErrorMessage() {
         ModuleList modules = new ModuleList();
+        AppState state = new AppState(modules, new PlannerList());
 
         RemoveCommand command = new RemoveCommand("CS1231");
-        String result = command.execute(modules);
+        String result = command.execute(state);
 
         assertEquals("CS1231 is not in your module list", result);
     }
@@ -32,11 +36,12 @@ public class RemoveCommandTest {
     @Test
     public void execute_lowercaseInput_convertedToUppercase() {
         ModuleList modules = new ModuleList();
+        AppState state = new AppState(modules, new PlannerList());
         DoneCommand doneCommand = new DoneCommand("CS1231", 4);
-        doneCommand.execute(modules);
+        doneCommand.execute(state);
 
         RemoveCommand removeCommand = new RemoveCommand("cs1231");
-        String result = removeCommand.execute(modules);
+        String result = removeCommand.execute(state);
 
         assertEquals("CS1231 has been removed", result);
     }
