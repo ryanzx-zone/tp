@@ -80,22 +80,24 @@ public class Parser {
             }
         }
 
-        if (input.startsWith("prereq")) {
-            if (input.length() < 8) {
-                throw new MissingCommandException("Please input module code after 'prereq '");
-            }
-            String moduleCode = input.substring(7).trim();
+        String prereqPrefix = "prereq ";
+        if (input.equals("prereq")) {
+            throw new MissingCommandException("Please input module code after 'prereq '");
+        }
+        if (input.startsWith(prereqPrefix)) {
+            String moduleCode = input.substring(prereqPrefix.length()).trim();
             if (moduleCode.isEmpty()) {
                 throw new MissingCommandException("Please input module code after 'prereq '");
             }
             return new PrereqCommand(moduleCode);
         }
 
-        if (input.startsWith("postreq")) {
-            if (input.length() < 9) {
-                throw new MissingCommandException("Please input module code after 'postreq '");
-            }
-            String moduleCode = input.substring(8).trim();
+        String postreqPrefix = "postreq ";
+        if (input.equals("postreq")) {
+            throw new MissingCommandException("Please input module code after 'postreq '");
+        }
+        if (input.startsWith(postreqPrefix)) {
+            String moduleCode = input.substring(postreqPrefix.length()).trim();
             if (moduleCode.isEmpty()) {
                 throw new MissingCommandException("Please input module code after 'postreq '");
             }
