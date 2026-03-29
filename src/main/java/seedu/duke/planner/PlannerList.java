@@ -148,5 +148,4 @@ public class PlannerList {
         removeModule(moduleCode);
         addModule(editedModule);
     }
-    // TODO: findModule(), editModule(), removeModule()
 }

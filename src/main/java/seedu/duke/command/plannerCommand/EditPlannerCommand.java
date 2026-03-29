@@ -1,6 +1,7 @@
-package seedu.duke.command;
+package seedu.duke.command.plannerCommand;
 
 import seedu.duke.appstate.AppState;
+import seedu.duke.command.Command;
 import seedu.duke.module.ModuleList;
 import seedu.duke.module.Module;
 import seedu.duke.planner.PlannerList;
