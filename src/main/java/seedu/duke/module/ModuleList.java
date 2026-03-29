@@ -305,25 +305,47 @@ public class ModuleList {
 
     /**
      * Returns the prerequisites for a given module.
+     *
+     * @param moduleCode The module code to look up prerequisites for.
+     * @return A formatted string listing the prerequisites, or a message
+     *         indicating no prerequisites or an unrecognised module.
      */
     public String getPrerequisites(String moduleCode) {
-        Module module = allModules.get(moduleCode.toUpperCase());
+        assert moduleCode != null : "Module code should not be null";
+        assert !moduleCode.trim().isEmpty() : "Module code should not be empty";
+
+        String code = moduleCode.toUpperCase();
+        logger.log(Level.FINE, "Looking up prerequisites for: {0}", code);
+
+        Module module = allModules.get(code);
         if (module == null) {
-            return moduleCode.toUpperCase() + " is not a recognised module.";
+            logger.log(Level.WARNING, "Unrecognised module: {0}", code);
+            return code + " is not a recognised module.";
         }
         List<String> prereqs = module.getPrerequisites();
         if (prereqs == null || prereqs.isEmpty()) {
-            return moduleCode.toUpperCase() + " has no prerequisites.";
+            logger.log(Level.FINE, "No prerequisites found for: {0}", code);
+            return code + " has no prerequisites.";
         }
-        return "Prerequisites for " + moduleCode.toUpperCase() + ": "
+        logger.log(Level.FINE, "Prerequisites for {0}: {1}", new Object[]{code, prereqs});
+        return "Prerequisites for " + code + ": "
                 + String.join(", ", prereqs);
     }
 
     /**
      * Returns the modules that are unlocked by completing a given module.
+     *
+     * @param moduleCode The module code to look up postrequisites for.
+     * @return A formatted string listing modules unlocked, or a message
+     *         indicating no modules are unlocked.
      */
     public String getModulesUnlockedBy(String moduleCode) {
+        assert moduleCode != null : "Module code should not be null";
+        assert !moduleCode.trim().isEmpty() : "Module code should not be empty";
+
         String code = moduleCode.toUpperCase();
+        logger.log(Level.FINE, "Looking up modules unlocked by: {0}", code);
+
         List<String> unlocked = new ArrayList<>();
         for (Module module : allModules.values()) {
             List<String> prereqs = module.getPrerequisites();
@@ -332,8 +354,10 @@ public class ModuleList {
             }
         }
         if (unlocked.isEmpty()) {
+            logger.log(Level.FINE, "No modules unlocked by: {0}", code);
             return code + " does not unlock any other modules.";
         }
+        logger.log(Level.FINE, "Modules unlocked by {0}: {1}", new Object[]{code, unlocked});
         return "Modules unlocked by " + code + ": " + String.join(", ", unlocked);
     }
 }

@@ -10,6 +10,8 @@ import seedu.duke.command.ListIncompleteCommand;
 import seedu.duke.command.ListNeededCommand;
 import seedu.duke.command.RemoveCommand;
 import seedu.duke.command.HelpCommand;
+import seedu.duke.command.PrereqCommand;
+import seedu.duke.command.PostreqCommand;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -104,6 +106,28 @@ public class ParserTest {
     @Test
     public void parseDone_nonNumericMc_throwsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> Parser.parseDone("done CS2113 /mc abc"));
+    }
+
+    @Test
+    public void parseCommand_prereqWithModuleCode_returnsPrereqCommand() {
+        Command result = Parser.parseCommand("prereq CS2113");
+        assertTrue(result instanceof PrereqCommand);
+    }
+
+    @Test
+    public void parseCommand_prereqWithoutModuleCode_throwsMissingCommandException() {
+        assertThrows(MissingCommandException.class, () -> Parser.parseCommand("prereq"));
+    }
+
+    @Test
+    public void parseCommand_postreqWithModuleCode_returnsPostreqCommand() {
+        Command result = Parser.parseCommand("postreq CS1010");
+        assertTrue(result instanceof PostreqCommand);
+    }
+
+    @Test
+    public void parseCommand_postreqWithoutModuleCode_throwsMissingCommandException() {
+        assertThrows(MissingCommandException.class, () -> Parser.parseCommand("postreq"));
     }
 }
 

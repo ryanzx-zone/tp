@@ -49,7 +49,9 @@ public class HelpCommand extends Command {
         sb.append("  done MODULE_CODE            - Mark a recognised module as completed\n");
         sb.append("  done MODULE_CODE /mc NUMBER - Add an external module with MCs\n");
         sb.append("  remove MODULE_CODE          - Remove a completed module\n");
-        sb.append("  count                       - Show your MC progress\n\n");
+        sb.append("  count                       - Show your MC progress\n");
+        sb.append("  prereq MODULE_CODE          - Show prerequisites for a module\n");
+        sb.append("  postreq MODULE_CODE         - Show modules unlocked by a module\n\n");
 
         // Module Planner
         sb.append("MODULE PLANNER COMMANDS\n");
@@ -100,6 +102,12 @@ public class HelpCommand extends Command {
         }
         if (trimmed.equals("list needed")) {
             return "list needed";
+        }
+        if (trimmed.equals("prereq")) {
+            return "prereq";
+        }
+        if (trimmed.equals("postreq")) {
+            return "postreq";
         }
         if (trimmed.equals("help")) {
             return "help";
@@ -204,6 +212,34 @@ public class HelpCommand extends Command {
                         + "  1. CS1010\n"
                         + "  2. CS2040C\n"
                         + "  3. CS2103 OR CS2113\n"
+                        + dash);
+
+        helpMap.put("prereq",
+                dash + "\n"
+                        + "COMMAND: prereq\n"
+                        + dash + "\n"
+                        + "Purpose:\n"
+                        + "  Shows the prerequisites needed before taking a module.\n\n"
+                        + "Usage:\n"
+                        + "  prereq MODULE_CODE\n\n"
+                        + "Example:\n"
+                        + "  prereq CS2113\n\n"
+                        + "Example output:\n"
+                        + "  Prerequisites for CS2113: CS2040C\n"
+                        + dash);
+
+        helpMap.put("postreq",
+                dash + "\n"
+                        + "COMMAND: postreq\n"
+                        + dash + "\n"
+                        + "Purpose:\n"
+                        + "  Shows what modules become available after completing a module.\n\n"
+                        + "Usage:\n"
+                        + "  postreq MODULE_CODE\n\n"
+                        + "Example:\n"
+                        + "  postreq CS2113\n\n"
+                        + "Example output:\n"
+                        + "  Modules unlocked by CS2113: CP3880, CP3200\n"
                         + dash);
 
         helpMap.put("help",
