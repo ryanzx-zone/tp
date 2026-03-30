@@ -305,6 +305,88 @@ Storing all help content in `buildHelpMap()` as a `LinkedHashMap` means that add
 `normaliseTopic()` acting as a pre-processing step keeps `showDetailedHelp()` clean. If future commands have aliases or shorthand (e.g. `lc` for `list completed`), `normaliseTopic()` is the only place that needs updating.
 
 ---
+## Implementation: Ryan
+
+### Class Structure
+
+The diagram below shows the key classes involved in the `prereq`, `postreq`, and `count` commands and their relationships.
+
+![Class diagram of prereq, postreq and count commands](https://img.plantuml.biz/plantuml/png/lLRFRzCm5BvFsl_mr5CRw0JNQAesiXqcjJ1fSEFYEe_MccC7sv60qlyTssaIkquhc2PwgHD_x_lUxnRWHXkYJ5Fnomi0_Sn4JHIfW7AYzQqnYgqRWmzKYYVs2-4T_EUFyshBIWJA5ENOFwvasN1yCiGq6YeqMrdgomjtRPZX25bMk0ZWZf6DZIU7Mg72xs-Xbjhu0n4bKDa80uMiAlVaBL1dMKlaKm2J7LbR2qBD_giu82T0T6-rSrZtUGC35F07KfkuAQbhvoJcS7iupN9uicaL6sUt3wKUlOi9xnnsjaQ6qJrmkTcWoc7flmT0vRDHo193yjQfY7MQ8cS3z4LEj_byTQyZsjTtkt2L_tUdNvWZeZIgg5CwcTfTTL7QuMjC7s3UjLZ2roc6Z1iqxKnChM5xMZ9j4jlXwiYwxPE6QMPGZoKyBLAlgRy8BkapbXz-_fsb7xmLrTFJIMkPmzhGaKwnNKHpOC8CB-em45j06-frQxGOSTqvEZqJ6r65mf8PxsgWCvApsIanfcqbQuu6ImTQIycHY2JYoGv5Kw6odI65tJRXZlCh9rfwVM8UFXQVLe_B-y_ttPlk-QwNS8Ukswz_p-VnLaXle-bBhiFXQRaF7NvrjJZQOZbGXRPLzJ4gNXkdOD6O1Y0FYuGSkf-B72omrF1DoMeS6eo1fIMSwv5w7dHYLyyBfTXnfNHkPbsLWeZFQYN84QLXpbhsdcm-Ny3a_IIssKhU_Oe6xnqiy_Yimpj-AGnX8e8ViHuQrV8INzSR5AN_e_47)
+
+### `prereq` Command Implementation
+
+#### Overview
+
+The `prereq` command displays the prerequisites needed before taking a specified module. For example, `prereq CS2113` shows that CS2040C must be completed before taking CS2113.
+
+#### Design
+
+The command follows the standard execution pipeline:
+
+```
+PathLock (Main) → Parser → PrereqCommand → AppState → ModuleList → Module
+```
+
+Key design decisions:
+- **`PrereqCommand`** delegates all prerequisite lookup logic to `ModuleList.getPrerequisites()`, keeping the command focused solely on orchestration.
+- The module code is normalised to uppercase in the constructor, ensuring case-insensitive matching throughout.
+
+#### Implementation
+
+**Parsing**
+
+`Parser.parseCommand()` checks for the `prereq ` prefix. If the input is bare `prereq` with no module code, a `MissingCommandException` is thrown. Otherwise, the module code is extracted and passed to the `PrereqCommand` constructor.
+
+```java
+String prereqPrefix = "prereq ";
+if (input.equals("prereq")) {
+    throw new MissingCommandException("Please input module code after 'prereq '");
+}
+if (input.startsWith(prereqPrefix)) {
+    String moduleCode = input.substring(prereqPrefix.length()).trim();
+    return new PrereqCommand(moduleCode);
+}
+```
+
+**Execution**
+
+1. `PrereqCommand.execute()` retrieves `ModuleList` from `AppState`.
+2. `ModuleList.getPrerequisites()` looks up the module in `allModules` and calls `Module.getPrerequisites()` to get the prerequisite list.
+3. If the module is not recognised, a message is returned. If recognised but has no prerequisites, a different message is returned.
+
+### `postreq` Command Implementation
+
+#### Overview
+
+The `postreq` command displays the modules unlocked by completing a specified module. For example, `postreq CS1010` shows all modules that list CS1010 as a prerequisite.
+
+#### Design
+
+```
+PathLock (Main) → Parser → PostreqCommand → AppState → ModuleList
+```
+
+Key design decisions:
+- **`PostreqCommand`** follows the same pattern as `PrereqCommand` for consistency.
+- `ModuleList.getModulesUnlockedBy()` iterates through all modules and checks if the given module code appears in each module's prerequisite list. This is a reverse lookup compared to `getPrerequisites()`.
+
+#### Implementation
+
+**Parsing**
+
+Identical pattern to `prereq` — checks for the `postreq ` prefix and throws `MissingCommandException` if no module code is provided.
+
+**Execution**
+
+1. `PostreqCommand.execute()` retrieves `ModuleList` from `AppState`.
+2. `ModuleList.getModulesUnlockedBy()` iterates through every module in `allModules`, checking if the target module code appears in each module's prerequisite list.
+3. Matching modules are collected and returned as a formatted string.
+
+#### Why This Design?
+
+The split into separate `PrereqCommand` and `PostreqCommand` classes (rather than a single command with a flag) follows the Single Responsibility Principle. Each command has one clear purpose and can be tested independently. The reverse lookup in `getModulesUnlockedBy()` avoids the need for a separate "post-requisite" data structure — it reuses the existing prerequisite data by searching in the opposite direction.
+
+---
 ## Product scope
 ### Target user profile
 - Y1-Y4 Computer Engineering Undergraduate Students (JC path)
