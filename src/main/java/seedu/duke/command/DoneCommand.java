@@ -1,56 +1,54 @@
 package seedu.duke.command;
 
-import seedu.duke.module.Module;
+import seedu.duke.appstate.AppState;
+import seedu.duke.module.ModuleValidator;
 import seedu.duke.module.ModuleList;
 import seedu.duke.exception.DuplicateException;
 import seedu.duke.storage.Storage;
-import seedu.duke.appstate.AppState;
 
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DoneCommand extends Command {
-    Storage storage = new Storage("data/test.txt");
-    private final String moduleCode;
     private final Logger logger = Logger.getLogger(DoneCommand.class.getName());
+
+    private final String moduleCode;
+    private final Integer mc;
 
     public DoneCommand(String moduleCode, Integer mc) {
         this.moduleCode = moduleCode.toUpperCase();
+        this.mc = mc;
     }
 
     @Override
     public String execute(AppState appState) {
-        assert appState != null : "AppState should not be null";
-
-        ModuleList modules = appState.getModule();
         String username = appState.getProfile().getName();
         Storage storage = new Storage(username);
 
+        ModuleList modules = appState.getModule();
         assert modules != null : "ModuleList should not be null";
         assert moduleCode != null && !moduleCode.isEmpty() : "ModuleCode should not be null";
 
-        logger.log(Level.FINE, "Executing DoneCommand for {0}", moduleCode);
+        logger.log(Level.FINE, "Executing DoneCommand for {0} , mc={1}", new Object[]{moduleCode, mc});
 
         try {
-            int modularCredits = modules.getMcForModule(moduleCode);
-            Module newModule = new Module(moduleCode, modularCredits);
+            ModuleValidator.validateModuleCode(moduleCode);
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
 
-            modules.addModule(newModule);
-            logger.log(Level.FINE, "Module added: {0} (MC={1})",
-                    new Object[]{moduleCode, modularCredits});
-
-            storage.save(modules.getCompletedModules());
-            logger.log(Level.FINE, "Storage updated for user {0} after adding module: {1}",
-                    new Object[]{username, moduleCode});
-
-            return moduleCode + " has been added.";
-
+        try {
+            if (modules.isRecognisedModule(moduleCode)) {
+                return handleInternalModule(modules, storage);
+            } else {
+                return handleExternalModule(modules, storage);
+            }
         } catch (DuplicateException e) {
             logger.log(Level.WARNING, "Duplicate module code: {0}", moduleCode);
             return e.getMessage();
 
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             logger.log(Level.WARNING, "Invalid module code: {0}", moduleCode);
             return e.getMessage();
 
@@ -59,5 +57,37 @@ public class DoneCommand extends Command {
             throw new RuntimeException(e);
         }
     }
+
+    private String handleInternalModule(ModuleList modules,Storage storage) throws DuplicateException, IOException {
+        int expectedMc = modules.getMcForModule(moduleCode);
+
+        ModuleValidator.validateInternalMc(mc, expectedMc, moduleCode);
+
+        modules.addModule(moduleCode);
+        storage.save(modules.getCompletedModules());
+
+        logger.log(Level.FINE, "Internal module added: {0} ({1} MCs)",
+                new Object[]{moduleCode, expectedMc});
+        return moduleCode + " has been added.";
+    }
+
+
+    private String handleExternalModule(ModuleList modules,Storage storage) throws DuplicateException, IOException {
+        if (mc == null) {
+            return "\"" + moduleCode + "\" is not a recognised module. "
+                    + "If this is an external module, provide its MCs using /mc. "
+                    + "Example: done " + moduleCode + " /mc 4";
+        }
+
+        ModuleValidator.validateMc(mc);
+
+        modules.addExternalModule(moduleCode, mc);
+        storage.save(modules.getCompletedModules());
+
+        logger.log(Level.FINE, "External module added: {0} ({1} MCs)",
+                new Object[]{moduleCode, mc});
+        return moduleCode + " has been added.";
+    }
+
 
 }

@@ -49,10 +49,11 @@ public class CountCommandTest {
     public void execute_externalModule_countsTowardsTotalMcs() {
         ModuleList ml = new ModuleList();
         AppState state = new AppState(ml, new PlannerList(), new UserProfile("Test User", 3.50));
-        DoneCommand doneCommand = new DoneCommand("SEP1001", mc);
+        DoneCommand doneCommand = new DoneCommand("SEP1001", 4);
         doneCommand.execute(state);
         CountCommand cmd = new CountCommand();
         String result = cmd.execute(state);
+        System.out.println(result);
         assertTrue(result.contains("Completed: 4 / 160 MCs"));
     }
 
@@ -69,6 +70,7 @@ public class CountCommandTest {
 
         CountCommand cmd = new CountCommand();
         String result = cmd.execute(state);
+        System.out.println(result);
         assertTrue(result.contains("Completed: 164 / 160 MCs"));
         assertTrue(result.contains("Incomplete: 0 MCs"));
     }
