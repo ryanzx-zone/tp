@@ -134,6 +134,7 @@ public class PlannerList {
                 if (currModule.getModuleCode().equals(moduleCode)) {
                     currSem.remove(j);
                     isModulePresent = true;
+                    break;
                 }
             }
         }

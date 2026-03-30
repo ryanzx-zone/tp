@@ -404,6 +404,114 @@ The diagrams below show the key classes involved in the planner feature and thei
 `planner edit`<br>
 ![Class Diagram of planner edit](./Diagrams/EditPlannerCommand.png)
 
+### `planner list` Command Implementation
+#### Overview
+The `planner list` command displays all the mods the user has added into the planner in order of semesters.
+
+### Design
+
+The command follows the standard execution pipeline:
+```
+PathLock (Main) → Parser → ListPlannerCommand → AppState → PlannerList
+```
+
+It then loops through the 2D array `course` stored in PlannerList and prints the moduleCode out.A
+
+#### Implementation
+
+**Parsing**
+
+`Parser.parseCommand()` checks for the `planner` then `list`
+
+**Execution**
+
+1. `ListPlannerCommand.execute()` retrieves `PlannerList` from `AppState`.
+2. Returns `PlannerList.list()`
+3. `PlannerList.list()`
+4. The planner stores its modules in `course`, an `ArrayList` of size 8, where each index corresponds to a semester.
+5. The method creates a `StringBuilder` named `output` to build the final string efficiently.
+6. It iterates through `course` sequentially from index `0` to `7`, ensuring that semesters are listed in order.
+7. For each semester, the method first appends a semester header in the format `Semester: X`, where `X` ranges from `1` to `8`.
+8. It then retrieves the `ArrayList<Module>` corresponding to that semester.
+9. The method iterates through all `Module` objects stored in that semester and appends each module’s code on its own line.
+10. After all 8 semesters have been processed, the method returns the constructed string.
+11. Even if a semester does not contain any modules, its header is still displayed. This ensures that the planner structure remains explicit and consistently formatted for the user.
+
+### `planner add` Command Implementation
+
+#### Overview
+
+The `planner add` command allows the User to add modules to the planner which can then be show with `planner list`
+
+#### Design
+```
+PathLock (Main) → Parser → AddToPlannerCommand → AppState → PlannerList
+```
+
+Key design decisions:
+- PlannerList is a separate list from ModuleList as whether a mod is plan or unplanned is independent on whether the User has completed the mod or not
+- PlannerList uses a 2D arrayList to allow for easy insertion and removal of mods across all 8 semesters
+
+#### Implementation
+
+**Parsing**
+`Parser.parseCommand()` checks for the `planner` then `add`. If subsequent input is bare a `MissingCommandException` is thrown. Otherwise, the module code and semester is extracted and passed to the `AddToPlannerCommand` constructor.
+
+**Execution**
+1. `AddToPlannerCommand.execute()` retrieves `ModuleList` and `PlannerList` from `Appstate`
+2. `moduleList.getModule(moduleCode)` retrieves Module based of `moduleCode`
+3. If module null, means moduleCode does not exist, `IllegalArgumentException` is thrown
+4. It sets `Module` semester attribute, if semester is of incorrect format `IllegalArgumentException` is thrown
+5. Executes `PlannerList.addModule(module)`
+6. It extracts semester, and inserts it into the respective array index of course
+
+### `planner remove` Command Implementation
+#### Overview
+The `planner remove` command allows the User to remove the modules that are in the planner should they not want it
+
+#### Design
+```
+PathLock (Main) → Parser → RemoveFromPlannerCommand → AppState → PlannerList
+```
+
+Key design decisions:
+- `planner remove` does not care if moduleCode exists or not as for it to be added to planner it should exist based on `planner add` implementation
+
+#### Implementation
+
+**Parsing**
+`Parser.parseCommand()` checks for the `planner` then `remove`. If subsequent input is bare a `MissingCommandException` is thrown. Otherwise, the module code is extracted and passed to the `RemoveFromPlannerCommand` constructor.
+
+**Execution**
+1. `RemoveFromPlanner.execute()` retrieves `PlannerList` from `AppState`
+2. Sweeps through every `Module` in `course` and retrieves their `ModuleCode`
+3. If it matches, `Module` is removed
+4. If no matches found, `NoSuchElementException` is thrown
+
+### `planner edit` Command Implementation
+#### Overview
+The `planner edit` command allows the User to make changes to what semester they plan to take a module.
+
+#### Design
+```
+PathLock (Main) → Parser → EditPlannerCommand → AppState → PlannerList
+```
+Key design decisions:
+- `planner edit` removes the current module, changes the `semester` attribute then reinserts it
+- This is done to help update the position of the module with respect to the course arrayList
+
+#### Implementation
+**Parsing**
+`Parser.parseCommand()` checks for the `planner` then `edit`. If subsequent input is bare a `MissingCommandException` is thrown. Otherwise, the module code and semester is extracted and passed to the `EditPlannerCommand` constructor.
+
+**Execution**
+1. `EditPlannerCommand.execute()` retrieves `ModuleList` and `PlannerList` from `AppState`
+2. `moduleList.getModule(moduleCode)` retrieves Module based of `moduleCode`
+3. If module null, means moduleCode does not exist, `IllegalArgumentException` is thrown
+4. Sets module's `semester` to inputted semester, if semester is in wrong format `IllegalArgumentException` is thrown 
+5. Executes `PlannerList.removeModule(moduleCode)` (see `planner remove` for execution)
+6. Executes `PlannerList.addModule(module)` (see `planner add` for execution)
+
 ---
 ## Product scope
 ### Target user profile
