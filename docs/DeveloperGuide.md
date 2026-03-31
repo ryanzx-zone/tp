@@ -733,6 +733,11 @@ It then loops through the 2D array `course` stored in PlannerList and prints the
 10. After all 8 semesters have been processed, the method returns the constructed string.
 11. Even if a semester does not contain any modules, its header is still displayed. This ensures that the planner structure remains explicit and consistently formatted for the user.
 
+#### Sequence Diagram
+
+The diagram below shows the sequence of action upon the user inputting `planner list`
+![sequence diagram of planner list](./Diagrams/plannerlist.png)
+
 ### `planner add` Command Implementation
 
 #### Overview
@@ -761,6 +766,11 @@ Key design decisions:
 5. Executes `PlannerList.addModule(module)`
 6. It extracts semester, and inserts it into the respective array index of course
 
+#### Sequence Diagram
+
+The diagram below shows the sequence of action upon the user inputting `planner add cs2113 y2s2`
+![sequence diagram of planner add](./Diagrams/plannerAdd.png)
+
 ### `planner remove` Command Implementation
 #### Overview
 The `planner remove` command allows the User to remove the modules that are in the planner should they not want it
@@ -783,6 +793,12 @@ Key design decisions:
 2. Sweeps through every `Module` in `course` and retrieves their `ModuleCode`
 3. If it matches, `Module` is removed
 4. If no matches found, `NoSuchElementException` is thrown
+
+#### Sequence Diagram
+
+The diagram below shows the sequence of action upon the user inputting `planner remove cs2113`
+![sequence diagram of planner remove](./Diagrams/plannerRemove.png)
+
 
 ### `planner edit` Command Implementation
 #### Overview
@@ -807,6 +823,11 @@ Key design decisions:
 4. Sets module's `semester` to inputted semester, if semester is in wrong format `IllegalArgumentException` is thrown 
 5. Executes `PlannerList.removeModule(moduleCode)` (see `planner remove` for execution)
 6. Executes `PlannerList.addModule(module)` (see `planner add` for execution)
+
+#### Sequence Diagram
+
+The diagram below shows the sequence of action upon the user inputting `planner edit cs2113 y2s2`
+![sequence diagram of planner edit](./Diagrams/editplanner.png)
 
 ---
 ## Product scope

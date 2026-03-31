@@ -143,9 +143,8 @@ public class PlannerList {
         }
     }
 
-    public void editModule(Module editedModule, String semester) {
+    public void editModule(Module editedModule, String semester, String moduleCode) {
         editedModule.setSemester(semester);
-        String moduleCode = editedModule.getModuleCode();
         removeModule(moduleCode);
         addModule(editedModule);
     }

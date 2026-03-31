@@ -18,7 +18,7 @@ public class EditPlannerCommand extends Command {
         ModuleList moduleList = appState.getModule();
         PlannerList course = appState.getPlanner();
         Module editedModule = moduleList.allModules.get(moduleCode);
-        course.editModule(editedModule, semester);
+        course.editModule(editedModule, semester, moduleCode);
         return "Edited " + moduleCode + " to be in " + semester;
     }
 }
