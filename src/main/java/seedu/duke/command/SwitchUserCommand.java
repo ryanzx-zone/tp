@@ -8,11 +8,14 @@ import seedu.duke.storage.ProfileStorage;
 import seedu.duke.storage.Storage;
 import seedu.duke.storage.PlannerStorage;
 import seedu.duke.planner.PlannerList;
+import java.util.logging.Logger;
 
 import java.io.IOException;
 import java.util.List;
 
 public class SwitchUserCommand extends Command {
+
+    private static final Logger logger = Logger.getLogger(SwitchUserCommand.class.getName());
 
     private final String username;
 
@@ -46,6 +49,7 @@ public class SwitchUserCommand extends Command {
                         moduleList.addExternalModule(code, mc);
                     }
                 } catch (Exception e) {
+                    logger.warning("Failed to switch user: " + e.getMessage());
                 }
             }
 

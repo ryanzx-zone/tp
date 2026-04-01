@@ -10,7 +10,12 @@ import seedu.duke.profile.UserProfile;
 public class ListNeededCommandTest {
     @Test
     public void execute_returnsAllRequiredModules() {
-        AppState state = new AppState(new ModuleList(), new PlannerList(), new UserProfile("Test User", 3.50));
+        AppState state = new AppState(
+                new ModuleList(),
+                new PlannerList(),
+                new UserProfile("Test User", 3.50),
+                "Test User"
+        );
         ListNeededCommand command = new ListNeededCommand();
         String result = command.execute(state);
         assertTrue(result.contains("Modules required for graduation:"));

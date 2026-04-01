@@ -13,7 +13,12 @@ import seedu.duke.profile.UserProfile;
 public class ListCompletedCommandTest {
     @Test
     public void execute_noCompletedModules_returnsEmptyMessage() {
-        AppState state = new AppState(new ModuleList(), new PlannerList(), new UserProfile("Test User", 3.50));
+        AppState state = new AppState(
+                new ModuleList(),
+                new PlannerList(),
+                new UserProfile("Test User", 3.50),
+                "Test User"
+        );
         ListCompletedCommand command = new ListCompletedCommand();
         String result = command.execute(state);
         assertEquals("No modules completed yet.", result);
@@ -24,7 +29,12 @@ public class ListCompletedCommandTest {
         ModuleList modules = new ModuleList();
         modules.addModule(new Module("CS2113",4));
         modules.addModule(new Module("CS1231",4));
-        AppState state = new AppState(modules, new PlannerList(), new UserProfile("Test User", 3.50));
+        AppState state = new AppState(
+                modules,
+                new PlannerList(),
+                new UserProfile("Test User", 3.50),
+                "Test User"
+        );
         ListCompletedCommand command = new ListCompletedCommand();
         String result = command.execute(state);
         assertTrue(result.contains("CS2113"));

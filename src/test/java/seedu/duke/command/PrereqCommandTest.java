@@ -11,7 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class PrereqCommandTest {
 
     private AppState createTestState() {
-        return new AppState(new ModuleList(), new PlannerList(), new UserProfile("Test User", 3.50));
+        return new AppState(new ModuleList(),
+                new PlannerList(),
+                new UserProfile("Test User", 3.50),
+                "Test User"
+        );
     }
 
     @Test

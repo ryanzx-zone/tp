@@ -13,7 +13,12 @@ public class RemoveCommandTest {
     @Test
     public void execute_existingModule_removedSuccessfully() {
         ModuleList modules = new ModuleList();
-        AppState state = new AppState(modules, new PlannerList(), new UserProfile("Test User", 3.50));
+        AppState state = new AppState(
+                modules,
+                new PlannerList(),
+                new UserProfile("Test User", 3.50),
+                "Test User"
+        );
 
         DoneCommand doneCommand = new DoneCommand("CS1231", mc);
         doneCommand.execute(state);
@@ -28,7 +33,12 @@ public class RemoveCommandTest {
     @Test
     public void execute_moduleNotInList_returnsErrorMessage() {
         ModuleList modules = new ModuleList();
-        AppState state = new AppState(modules, new PlannerList(), new UserProfile("Test User", 3.50));
+        AppState state = new AppState(
+                modules,
+                new PlannerList(),
+                new UserProfile("Test User", 3.50),
+                "Test User"
+        );
 
         RemoveCommand command = new RemoveCommand("CS1231");
         String result = command.execute(state);
@@ -39,7 +49,12 @@ public class RemoveCommandTest {
     @Test
     public void execute_lowercaseInput_convertedToUppercase() {
         ModuleList modules = new ModuleList();
-        AppState state = new AppState(modules, new PlannerList(), new UserProfile("Test User", 3.50));
+        AppState state = new AppState(
+                modules,
+                new PlannerList(),
+                new UserProfile("Test User", 3.50),
+                "Test User"
+        );
         DoneCommand doneCommand = new DoneCommand("CS1231", mc);
         doneCommand.execute(state);
 

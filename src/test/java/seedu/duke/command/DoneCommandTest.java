@@ -14,7 +14,12 @@ public class DoneCommandTest {
     @Test
     public void execute_validModule_success() {
         ModuleList modules = new ModuleList();
-        AppState state = new AppState(modules, new PlannerList(), new UserProfile("Test User", 3.50));
+        AppState state = new AppState(
+                modules,
+                new PlannerList(),
+                new UserProfile("Test User", 3.50),
+                "Test User"
+        );
         DoneCommand command = new DoneCommand("CS1231", mc);
 
         String result = command.execute(state);
@@ -26,7 +31,12 @@ public class DoneCommandTest {
     @Test
     public void execute_lowercaseInput_convertedToUppercase() {
         ModuleList modules = new ModuleList();
-        AppState state = new AppState(modules, new PlannerList(), new UserProfile("Test User", 3.50));
+        AppState state = new AppState(
+                modules,
+                new PlannerList(),
+                new UserProfile("Test User", 3.50),
+                "Test User"
+        );
 
         DoneCommand command = new DoneCommand("cs1231", mc);
         String result = command.execute(state);

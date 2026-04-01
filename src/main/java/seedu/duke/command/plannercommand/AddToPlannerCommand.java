@@ -6,7 +6,6 @@ import seedu.duke.module.ModuleList;
 import seedu.duke.module.Module;
 import seedu.duke.planner.PlannerList;
 import seedu.duke.profile.UserProfile;
-import seedu.duke.storage.PlannerStorage;
 
 public class AddToPlannerCommand extends Command {
     private static final int MINIMUM_WORKLOAD = 18;
