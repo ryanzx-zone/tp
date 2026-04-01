@@ -12,7 +12,7 @@ PathLock is a desktop CLI application designed to help Computer Engineering (CEG
 
 ## Code Contributed
 
-View my code contributions on the tP Code Dashboard.
+View my code contributions on the tP Code Dashboard: [ShiYong: RepoSense tP Code Contributions](https://nus-cs2113-ay2526-s2.github.io/tp-dashboard/?search=shiyong52)
 
 ---
 
