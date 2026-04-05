@@ -63,9 +63,10 @@ public class HelpCommand extends Command {
 
         // Pathlock Commands
         sb.append("PATHLOCK SYSTEM COMMANDS\n");
-        sb.append("  help            - Show all commands\n");
-        sb.append("  help <command>  - Show detailed help for one command\n");
-        sb.append("  exit            - Close PathLock\n");
+        sb.append("  help              - Show all commands\n");
+        sb.append("  help <command>    - Show detailed help for one command\n");
+        sb.append("  switch USERNAME   - Switch to a different user profile\n");
+        sb.append("  exit              - Close PathLock\n");
         sb.append(dash);
 
         return sb.toString();
@@ -116,6 +117,8 @@ public class HelpCommand extends Command {
             return "planner remove";
         case "help":           
             return "help";
+        case "switch":
+            return "switch";
         case "exit":          
             return "exit";
         default:             
@@ -320,6 +323,21 @@ public class HelpCommand extends Command {
                         + "  help list completed\n\n"
                         + "Example:\n"
                         + "  help remove\n"
+                        + dash);
+
+        helpMap.put("switch",
+                dash + "\n"
+                        + "COMMAND: switch\n"
+                        + dash + "\n"
+                        + "Purpose:\n"
+                        + "  Switches the current session to a different user's profile,\n"
+                        + "  loading their completed modules and planner data.\n\n"
+                        + "Usage:\n"
+                        + "  switch USERNAME\n\n"
+                        + "Example:\n"
+                        + "  switch alice\n\n"
+                        + "Example output:\n"
+                        + "  Switched to user: alice\n"
                         + dash);
 
         helpMap.put("exit",

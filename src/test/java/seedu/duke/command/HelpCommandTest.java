@@ -26,6 +26,9 @@ public class HelpCommandTest {
         assertTrue(result.contains("list completed"));
         assertTrue(result.contains("done MODULE_CODE"));
         assertTrue(result.contains("remove MODULE_CODE"));
+        assertTrue(result.contains("MODULE PLANNER COMMANDS"));
+        assertTrue(result.contains("planner list"));
+        assertTrue(result.contains("switch USERNAME"));
         assertTrue(result.contains("help"));
         assertTrue(result.contains("exit"));
     }
@@ -88,5 +91,20 @@ public class HelpCommandTest {
         String result = command.execute(state);
         assertTrue(result.contains("COMMAND: done"));
         assertTrue(result.contains("done MODULE_CODE"));
+    }
+
+    @Test
+    public void execute_helpSwitch_returnsDetailedHelpForSwitch() {
+        AppState state = new AppState(
+                new ModuleList(),
+                new PlannerList(),
+                new UserProfile("Test User", 3.50),
+                "Test User"
+        );
+        HelpCommand command = new HelpCommand("switch");
+        String result = command.execute(state);
+        assertTrue(result.contains("COMMAND: switch"));
+        assertTrue(result.contains("Switches the current session to a different user"));
+        assertTrue(result.contains("switch USERNAME"));
     }
 }
