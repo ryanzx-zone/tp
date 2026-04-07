@@ -14,7 +14,7 @@ import seedu.duke.module.Module;
 
 public class Storage {
     private static final Logger logger = Logger.getLogger(Storage.class.getName());
-    private static String filePath;
+    private String filePath;
 
     public Storage(String username) {
         assert username != null && !username.trim().isEmpty() : "Username cannot be empty";

@@ -346,6 +346,12 @@ public class ModuleList {
         String code = moduleCode.toUpperCase();
         logger.log(Level.FINE, "Looking up modules unlocked by: {0}", code);
 
+        Module target = allModules.get(code);
+        if (target == null) {
+            logger.log(Level.WARNING, "Unrecognised module: {0}", code);
+            return code + " is not a recognised module.";
+        }
+
         List<String> unlocked = new ArrayList<>();
         for (Module module : allModules.values()) {
             List<String> prereqs = module.getPrerequisites();

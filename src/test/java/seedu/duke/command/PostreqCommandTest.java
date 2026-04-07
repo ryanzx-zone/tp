@@ -43,7 +43,7 @@ public class PostreqCommandTest {
         AppState state = createTestState();
         PostreqCommand cmd = new PostreqCommand("FAKE1234");
         String result = cmd.execute(state);
-        assertTrue(result.contains("FAKE1234 does not unlock any other modules"));
+        assertTrue(result.contains("FAKE1234 is not a recognised module"));
     }
 
     @Test

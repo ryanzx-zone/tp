@@ -73,7 +73,6 @@ public class CountCommandTest {
         doneCommand.execute(state);
         CountCommand cmd = new CountCommand();
         String result = cmd.execute(state);
-        System.out.println(result);
         assertTrue(result.contains("Completed: 4 / 160 MCs"));
     }
 
@@ -95,7 +94,6 @@ public class CountCommandTest {
 
         CountCommand cmd = new CountCommand();
         String result = cmd.execute(state);
-        System.out.println(result);
         assertTrue(result.contains("Completed: 164 / 160 MCs"));
         assertTrue(result.contains("Incomplete: 0 MCs"));
     }
