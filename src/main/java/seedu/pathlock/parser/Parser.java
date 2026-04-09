@@ -21,6 +21,9 @@ import seedu.pathlock.command.plannercommand.ListPlannerCommand;
 
 public class Parser {
 
+    private static final int DONE_PREFIX_LENGTH = 5;
+    private static final int REMOVE_PREFIX_LENGTH = 7;
+
     public static Command parseCommand(String input) {
 
         if (input.equals("list completed")) {
@@ -87,7 +90,7 @@ public class Parser {
                 return new EditPlannerCommand(moduleCode, semester);
             }
             if (input.startsWith("remove")) {
-                if (input.length() < 8) {
+                if (input.length() < REMOVE_PREFIX_LENGTH + 1) {
                     throw new MissingCommandException("Please input module code after 'remove '");
                 }
                 String moduleCode = input.substring(7).trim();
@@ -146,7 +149,7 @@ public class Parser {
     }
 
     public static DoneCommand parseDone(String input) {
-        if (input.length() < 6) {
+        if (input.length() < DONE_PREFIX_LENGTH + 1) {
             throw new MissingCommandException("Please input module code after 'done '");
         }
 
