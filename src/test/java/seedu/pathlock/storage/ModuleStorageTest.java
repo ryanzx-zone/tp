@@ -25,7 +25,7 @@ public class ModuleStorageTest {
 
     @Test
     public void load_emptyFile_returnsEmptyList() throws IOException {
-        ModuleStorage storage = new ModuleStorage(username);
+        ModStorage storage = new ModStorage(username);
 
         storage.save(List.of());
         List<Module> modules = storage.load();
@@ -36,7 +36,7 @@ public class ModuleStorageTest {
 
     @Test
     public void save_thenLoad_returnsSameModules() throws IOException {
-        ModuleStorage storage = new ModuleStorage(username);
+        ModStorage storage = new ModStorage(username);
 
         Module cs1010 = new Module("CS1010", 4);
         Module cs2113 = new Module("CS2113", 4);
@@ -53,7 +53,7 @@ public class ModuleStorageTest {
 
     @Test
     public void save_createsFileAndParentDirectories() throws IOException {
-        ModuleStorage storage = new ModuleStorage(username);
+        ModStorage storage = new ModStorage(username);
 
         storage.save(List.of());
 
@@ -64,7 +64,7 @@ public class ModuleStorageTest {
 
     @Test
     public void load_ignoresBlankLines() throws IOException {
-        ModuleStorage storage = new ModuleStorage(username);
+        ModStorage storage = new ModStorage(username);
         File file = new File(storage.getFilePath());
         file.getParentFile().mkdirs();
 

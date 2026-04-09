@@ -16,7 +16,7 @@ import seedu.pathlock.module.ModuleList;
 import seedu.pathlock.parser.Parser;
 import seedu.pathlock.planner.PlannerList;
 import seedu.pathlock.profile.UserProfile;
-import seedu.pathlock.storage.ModuleStorage;
+import seedu.pathlock.storage.ModStorage;
 import seedu.pathlock.storage.ProfileStorage;
 import seedu.pathlock.ui.UI;
 
@@ -79,7 +79,7 @@ public class PathLock {
     }
 
     private static ModuleList getModuleList(String username) {
-        ModuleStorage storage = new ModuleStorage(username);
+        ModStorage storage = new ModStorage(username);
         ModuleList modules = new ModuleList();
 
         try {

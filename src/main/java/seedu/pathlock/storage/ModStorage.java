@@ -11,10 +11,10 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ModuleStorage extends Storage<List<Module>> {
+public class ModStorage extends Storage<List<Module>> {
     private static final Logger logger = Logger.getLogger(Storage.class.getName());
 
-    public ModuleStorage(String username) {
+    public ModStorage(String username) {
         super("data/users/" + username.trim() + "/modules.txt");
         assert username != null && !username.trim().isEmpty() : "Username cannot be empty";
     }

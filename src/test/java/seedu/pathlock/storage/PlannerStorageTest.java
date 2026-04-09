@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PlannerStorageTest {
 
-    private final String username = "testUser_" + UUID.randomUUID();
+    private final String username = "testUser";
 
     @AfterEach
     public void tearDown() {
