@@ -59,7 +59,8 @@ Implemented a duplicate module check inside `ModuleList`, preventing a user from
     - Includes the sequence diagram for `remove CS2113`
 - **Duplicate Module Check** — Overview and Sequence Diagram
     - Includes the sequence diagram for the duplicate check flow
-
+- **Architecture** — Overview and Architecture Diagram
+    - Includes a high-level architecture diagram and description
 ---
 
 ## Contributions to Team-Based Tasks
