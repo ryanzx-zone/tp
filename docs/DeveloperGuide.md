@@ -5,6 +5,7 @@
 1. [Acknowledgements](#1-acknowledgements)
 
 2. [Design](#2-design)
+    - [Architecture](#architecture)
     - [Command Component](#command-component)
 
 3. [Implementation: Russell](#3-implementation-russell)
@@ -80,22 +81,32 @@
 ---
 ## 2. Design
 
+### Architecture
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
+---
 ### Command Component
-API: Command.java
+**API:** `Command.java`
 
-{insert UML diagram here}
+![ClassDiagram_OverviewCommandClasses.png](Diagrams/ClassDiagram_OverviewCommandClasses.png)
+
+The `Command` component serves as the backbone of PathLock's execution model. All user actions are routed through a unified command pipeline:
+
+```
+User Input → PathLock → Parser → Command → AppState → Domain Component
+```
 
 How the `Command` Component work:
-1. When the user enters a command, the `Command` component identifies the type of command and creates the corresponding Command object.
-2. This command is represented as a subclass of `Command`, such as `DoneCommand`, `RemoveCommand`, `CountCommand`, `ListCompletedCommand`, `ListIncompleteCommand`, `ListNeededCommand`, or `AddToPlannerCommand`.
-3. The selected command is then executed by calling its `execute(ModuleList modules)` method. During execution, the command interacts with the ModuleList to retrieve, add, remove, or count modules. For example:
-   - `DoneCommand` adds a completed module to the list and saves the updated data to storage.
-   - `RemoveCommand` removes a module from the list and saves the updated data to storage.
-   - `CountCommand` retrieves the total number of MCs completed.
-   - `ListCompletedCommand`, `ListIncompleteCommand`, and `ListNeededCommand` retrieve different filtered views of the module list. 
-4. After execution, the command returns a String result, which is then shown to the user as the system response. This is evident from the shared method signature in Command and the implementations in each subclass.
+1. When the user enters a command, `PathLock` passes the raw input to `Parser`, which identifies the command type and constructs the corresponding `Command` object.
+2. Each command is a concrete subclass of the abstract `Command` class, falling into one of four groups:
+    - **List Commands** — `ListCompletedCommand`, `ListIncompleteCommand`, `ListNeededCommand`
+    - **Module Management Commands** — `DoneCommand`, `RemoveCommand`, `CountCommand`, `PrereqCommand`, `PostreqCommand`
+    - **Module Planner Commands** — `AddToPlannerCommand`, `RemoveFromPlannerCommand`, `EditPlannerCommand`, `ListPlannerCommand`, `PlannerSwitchCommand`
+    - **PathLock System Commands** — `HelpCommand`, `SwitchUserCommand`
+3. `PathLock` calls `execute(appState)` on the returned command. Inside `execute()`, the command retrieves what it needs from `AppState` (via `getModule()`, `getPlanner()`, or `getProfile()`), then delegates the domain logic to the relevant component.
+4. Every `execute()` returns a `String` result, which `PathLock` prints to the user.
+
+![SequenceDiagram_FlowOfCommands.png](Diagrams/SequenceDiagram_FlowOfCommands.png)
 
 ---
 ## 3. Implementation: Russell
@@ -388,7 +399,7 @@ The diagram below shows duplicate module check path:
 
 The diagram below shows the key classes involved in the `list` commands and the `help` command, and their relationships.
 
-![Class Diagram of list and help Commands](https://img.plantuml.biz/plantuml/png/fLNBRjim4BmBq3yGEhbf7RHNmn0Is45g84u2ECTUQ6bh4wL8WQJGHvf_xvAY7hJefe-JHExix8WxIrrfGvLfAfucXXaEPCMfrcJDw47HQa4uquPGKP8Zy9giP5NPXGE1JfCqER8IIC5KmI5Dz1ScQeg9fB28QsCKspS6DeKKE_O3o7kRuc8aUwPxRHGjpCiduOapGdLVv3bD21b0v2ryWmB9PhIkTuOQM91h__PcGNPOIXpIv6MeS8VQaQpcOA0CMF-2Qaos4OMd-rUsWUiUeFn_LH-nAm77tCYQ5GFwJranKn_brriGe2YtjBDfT0s6CWwb2mU5GgoGggBe77Yoc1bweZ5nvBvXtD5jgIk8ZsKRVkTX-SaNFrAbGNbpe7aDAz0QjTtr1p6fv_SZ6MifO0AtcttAg6lTgVbc7S1iPTbmSBhTc-rha39i-oG-jcGRrU51EyXWjFEOra3nE6gBLR52bkqwZ-Zq3Yfa2K6JAcmp4wQr0Pv0exiFthcLAybqNz6Msal9WOfEpOEwLR89FENAWsYgW8iibtOFJMYO57dUQjhShnwsZtStJpTsrRslFKat0CkVytbqw2EGoIX7CC68diH7WvSctfENbtdypbcGGW4wHq-WqnlbF3QyCUAuyNqmGaHLMNplwGL1RAd9PoMh5Z-Lzaf2gEyLS5JDQ5nGFELS_qxAEVHKHmpPQvlFJm17oKi4ZFQo3ncvmAPd5ratAiWZ1Tw6eaSw8eiCx8nqTFXFEhj3LPllf89g3mf3Lo1Az__z1G00)
+![Class Diagram of list and help Commands](./Diagrams/ClassDiagram_ListHelpCommands.png)
 
 ### `list` Commands Implementation
 
@@ -456,11 +467,11 @@ Inside `ModuleList`:
 
 The diagrams below shows the execution path for `list completed`, `list incomplete` and `list needed`.
 
-![Sequence Diagram for list completed](https://img.plantuml.biz/plantuml/png/TP9DQeKm4CVtWTnXS6KNNi15UMAN2W-a1mWwjQ69-fAnzFYT95hKjklv_JzcafidvMYrHWhIP10wVAmuzGWlMerEsHACzWJzR1U3X0FKixLg6gIGGlKqEtZrwAHOs4RtUb4JGLRU5RqtS_-HWV9mRtwF7OlIy3fhEAxUqxQmI3Rr5QsMfID56CTLTnstyx0Q37uHQ9lGERI5ufbBGGdPURSihgG_sJAMbeAfm3AwXCfRdVogUpeAemwAFUElVN8M37YHnAYcPWb-ORyIvchRxsWVhY05OmnN7SCZKbeqFsBX6b8mKEocDaB-59oePDQ6ikPODjdwasyw8hC_lc-piuh2p-Z8wMay1IGy1EpdSEXNGqTeNvw9-3XyQ_OX_mzwmsdW__eD)
+![Sequence Diagram for list completed](Diagrams/SequenceDiagram_ListCompletedCommand.png)
 
-![Sequence Diagram for list incomplete](https://img.plantuml.biz/plantuml/png/TPBDQeGm4CVlWRp3uCaUzWKyb1LxAIWiI1yWwDI69kecO-dZTvBeehOzp-__CPDSFIb7YpLIa2Q3qE9zmR53UD5gSCeMOBGdq6CtsTaW8LIJjMhifP12TJGvUFFef9ZPHtTwLYD1LjmKVTHJzvc1yd2hVuyTYzBmFAivx_KHjwP5jAxER3dFBId2E2xRyxYP-iLWC8n0KuVIeIvSdhaL592TjilYKlgBFMDjAHWBCBDpABtsoS_2FdlQIwCIBblCdplbhEZnf8bfTSKQ_CPk8SpLkkFUFrn22iOOBbk61wIqRBx7maMaOE2ocTe8-KDmef9P4zgQGzlawm_6wP8CFupV9sSLyHsW9QV7uP2Gy92m7SIXNmpjeMrx9k8ByRtPX_m_w1N7dh_j3m00)
+![Sequence Diagram for list incomplete](Diagrams/SequenceDiagram_ListIncompleteCommand.png)
 
-![Sequence Diagram for list needed](https://img.plantuml.biz/plantuml/png/TP91ReGm34NtaN87YnLTS04MrI2wP4OZeHuW0fT6JO0cfkhnwoGm0aPT-_dvsyd5atAqM2C5QJ88BNulE7O8RreDJjaIZFO48sAFFTIJjMhifP12TJGvUFVef9ZPeJizgv4WA--AFfkf-yf0URWtpsN7JQbuhZKywnP7hPCYrjHdhfhdbXHXB5VjkNoT-iLWa4NWseJ08IeKhvm8IiXsMsLn6Vt3lXXN2aO2oDmSmgvPyaFJoxuhDa6nsP_Mo9dkySJ78KtDFFvYjn3cQbrhxmxBIy4OmrNBy82KziltM3Y250mKczH6o1y69oh9hY6fUIHDJd-GfiCn-91-JCug8luABJaz3WTxmeDzEuH3lnZQGzlcJCG7uHEpX_m_w0N7dd_d7m00)
+![Sequence Diagram for list needed](Diagrams/SequenceDiagram_ListNeededCommand.png)
 
 #### Why This Design?
 
@@ -533,11 +544,11 @@ private String showDetailedHelp(String inputTopic) {
 
 The diagram below shows the execution path for `help`:
 
-![Sequence Diagram for help](https://img.plantuml.biz/plantuml/png/RP4nReGm44LxIxx3Y8eKUm6AQ2KYXMABbL0EO9aHM07RiGSsny_OG8BOrF_DVr_sDP8AD4-Z56HeH6ZnQqQh4TwCweEQAXXmz52xQLAsaq9fSW4-8WOfF9yQRRoo14LrLpJSdFuiG4MutvxZm4ThUCuQLco633Ir558a2LnUkGigADAC8llDeWYpGGhE4i60J_rRIRdIBqSyqt3P-mxAahaET_AljQcPms_KCs6fl6-9usFdEfEn7Ow3UxoZnQ36r5_-3__I58pjp-wDo2Fxu6QF7UXrABW5msBm0UtJAUox-JO_7By8CnGXO9n7EckkQBlyxJy0)
+![Sequence Diagram for help](Diagrams/SequenceDiagram_HelpCommand.png)
 
 The diagram below shows the execution path for `help done`:
 
-![Sequence Diagram for help done](https://img.plantuml.biz/plantuml/png/ZPDBJiCm48RtaNA7KLPXKGwG1QgKBh8eKgN20KmyD1P-OK-04t00ZiX9i9sQHg6jMC_tFsoFrvwOer79iY114c6FhoFg7c4ZsC4nrS20qW8t6g4rIZ7Dow8iM4_6mQD7LnOsE8XUMAO9gcR7QDYQ_gK2vc6t_JjsGJGDbxCk91qp4j2rCIg6mEekU443rM-RAfKGRummnPH5028MA1j3ZaxrJ78proG9hBBpBBokCiqnywU0hWqqVc0_4jRCsZs5yTnvgXsm3Fl1l6-Gc938Oyp9_xBcQHGomVVCrkV9Z0uJjMmxCzF6AIQ5nmTZHP_ZuVlp2whbNIxy6o0db49-nVvOuFQ0TFLecNVeHqdd33Fn70iJ8P-sRnywwCC5GNgzVmdY-mL1MgYm904XVw7C6ZLFl-87)
+![Sequence Diagram for help done](Diagrams/SequenceDiagram_HelpDoneCommand.png)
 
 #### Why This Design?
 
@@ -550,7 +561,7 @@ Storing all help content in `buildHelpMap()` as a `LinkedHashMap` means that add
 
 The diagram below show the key classes involved in `UserProfile` and `ProfileStorage`.
 
-![Class Diagram for UserProfile and ProfileStorage](https://img.plantuml.biz/plantuml/png/RLFBJiCm4Bn7oZ_iCLLfuPm3AYe28V6eg107n65hczHgR4UsKo4G_yuwhTEuRIvnTcTcPoV9p7cqlbLrdkMPbxuMCA_HERYLM5bK9RmvOHVMV4bgeUQmFo-ziLY9G5jBBe19osfwT1kf6oGciA1puxsLgzQB1sRqKlu8k0gKhfT8_-OPq3K1ZKgKi2IQhcAjQh04RjfLc11Auo6t658kXk1HH5V2FnEe6ANANUE-mL1FvQd-AfXHIcWk-1D-lnkxgGto09NQvzdVOOyqaiCg9B9lBT2lYvOi3wsUc0dwSQSpuC7AaU5mAoAZsTqJ7B6sHlBKBNbvD6mJVOv1eTG5sih5OH-VFR7VvCNEhK3VZtCCjHQMABl3EOCJ85EgyNV6XfJFK6BgdR_UsNHwVHng2PI8Ey8CFw0IMESlO5BgAJ84xIv3U8IUqIkc7-0V)
+![Class Diagram for UserProfile and ProfileStorage](Diagrams/ClassDiagram_UserProfileProfileStorage.png)
 
 ### `UserProfile` Implementation
 
@@ -607,7 +618,7 @@ Maps the user's GPA to a recommended MC maximum workload per semester:
 
 #### Sequence Diagram
 
-![Sequence Diagram: UserProfile and ProfileStorage](https://img.plantuml.biz/plantuml/png/jLLDIyD04Bq7yXz6JnPg4S5BaLBHuaMbM4IlOp9DboQxSRFn0_pnpiQqsQJRKaLJ2DlPdVVUphmXuyAWDcMMXe4H9YMOqKj9CYAu4fXep8RmK92UQZKNl8ioXdezCqfZGc604Q-gKs6GCvY8H8xIm1JDuaP5oqwqa-tkEKnX40RsBnoFra0mX1HB6Iq0yxpY5Qzeo24AW_LPpgloXt0uaOON7whK834ZZdYnxLuNegtM2b0Ory4Zcz1pTNIknb3jT1zWGgQEMTvVOFf0PqOBcOH1J3k0c2KraDUThLxqBWfJX07miuTsJHZ3tSNjvFDwUW5phJBuxftDtyfiD_qKFexlapikiXrkrB8kDvZUt4XLwpuaEVOwYbi-RF1Tj4sjcrBTtEqNRWnOu2l5BTx6YewT7ocDL4RmZD6o3-Vs5gC3jZIb1QtRAPM1kIfbl0-nBDEqI-WT7zlcezF12HW5PuEJNZLAgz9qnedhwiVynuOqxBbxsj-IdNDkUx6ILMFrzfwBDorOz7emk5X_FHO_cGgVXrPLgomtW7jYHsKaOueXm_SXFC7jPN6uWY5h8_iRyug_5Ly0)
+![Sequence Diagram: UserProfile and ProfileStorage](Diagrams/SequenceDiagram_UserProfileProfileStorage.png)
 
 
 #### Why This Design?
