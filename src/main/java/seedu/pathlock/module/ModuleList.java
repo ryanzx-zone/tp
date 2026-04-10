@@ -32,9 +32,11 @@ public class ModuleList {
 
     /**
      * Returns the MC value for a given module code.
+     * Looks up both required and external modules.
      *
      * @param moduleCode Module code to look up.
-     * @return MC value, or 4 as default if not found.
+     * @return MC value of the module.
+     * @throws IllegalArgumentException If the module is not recognised.
      */
     public int getMcForModule(String moduleCode) {
         assert moduleCode != null : "Module code should not be null";
@@ -234,6 +236,9 @@ public class ModuleList {
 
     /**
      * Returns a summary of completed and remaining MCs with percentage.
+     *
+     * @return A formatted string showing completed MCs, remaining MCs,
+     *         and the percentage progress towards graduation.
      */
     public String countMcs() {
         int completedMcs = 0;

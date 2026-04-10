@@ -6,6 +6,9 @@ import seedu.pathlock.module.ModuleList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Displays the user's MC progress towards graduation.
+ */
 public class CountCommand extends Command {
 
     private static final Logger logger = Logger.getLogger(CountCommand.class.getName());
