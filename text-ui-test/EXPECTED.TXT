@@ -11,7 +11,7 @@ WELCOME TO
 
 A CEG mod planner
 =======================================================================
-Enter your name: Enter your GPA (2.0 to 5.0): Profile saved for TestUser.
+Enter your name: Enter your GPA (2.0 to 5.0) (Enter 'y1s1' if you are in your first semester of study): Profile saved for TestUser.
 Recommended max semester workload: 26 MCs
 =======================================================================
 Pathlock awaits: =======================================================================
