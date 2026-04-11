@@ -804,7 +804,7 @@ It then loops through the 2D array `course` stored in PlannerList and prints the
 #### Sequence Diagram
 
 The diagram below shows the sequence of action upon the user inputting `planner list`
-![sequence diagram of planner list](./Diagrams/plannerlist.png)
+![sequence diagram of planner list](./Diagrams/seq_diag_plannerlist.png)
 
 ---
 ### `planner add` Command Implementation
