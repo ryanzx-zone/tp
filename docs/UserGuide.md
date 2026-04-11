@@ -191,6 +191,12 @@ Marks a module as completed and records it towards your graduation progress.
 - For **external modules** not in the CEG curriculum (e.g. `done GEC1001 /mc 4`), you must supply the MC count using `/mc`.
 - Module codes are case-insensitive (e.g. `done cs2113` works the same as `done CS2113`).
 
+**MC (Modular Credit) Constraints**: When using `/mc`, the MC value must:
+- Be provided (cannot be missing)
+- Be an **integer**
+- Be **greater than 0**
+- Be **less than or equal to 12**
+
 **Examples:**
 - `done CS2113` — marks CS2113 as completed (MC looked up automatically)
 - `done GEC1001 /mc 4` — marks external module GEC1001 as completed with 4 MCs
@@ -210,6 +216,15 @@ Invalid module code format: "BADCODE".
 ```
 "GEC1001" is not a recognised module. If this is an external module,
 provide its MCs using /mc. Example: done GEC1001 /mc 4
+```
+```
+Please provide a number after /mc. Example: done CS2113 /mc 4
+```
+```
+MC must be a positive integer, but got: 0.
+```
+```
+MC cannot be greater than 12, but got: 20.
 ```
 
 ---
