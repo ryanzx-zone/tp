@@ -8,7 +8,6 @@ import seedu.pathlock.module.ModuleList;
 import seedu.pathlock.planner.PlannerList;
 import seedu.pathlock.profile.UserProfile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EditPlannerCommandTest {
