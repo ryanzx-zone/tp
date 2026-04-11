@@ -30,15 +30,17 @@ public class Parser {
 
     public static Command parseCommand(String input) {
 
-        if (input.equals("list completed")) {
+        String normalised = input.trim().replaceAll("\\s+", " ");
+
+        if (normalised.equals("list completed")) {
             return new ListCompletedCommand();
         }
 
-        if (input.equals("list incomplete")) {
+        if (normalised.equals("list incomplete")) {
             return new ListIncompleteCommand();
         }
 
-        if (input.equals("list needed")) {
+        if (normalised.equals("list needed")) {
             return new ListNeededCommand();
         }
 
@@ -137,11 +139,11 @@ public class Parser {
             return new PostreqCommand(moduleCode);
         }
 
-        if (input.equals("help")) {
+        if (normalised.equals("help")) {
             return new HelpCommand();
         }
 
-        if (input.startsWith("help ")) {
+        if (normalised.startsWith("help ")) {
             String topic = input.substring(5).trim();
             if (topic.isEmpty()) {
                 return new HelpCommand();

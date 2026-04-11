@@ -121,7 +121,7 @@ public class PathLock {
         ProfileStorage profileStorage = new ProfileStorage(name);
         try {
 
-            UserProfile savedProfile = profileStorage.load(); //
+            UserProfile savedProfile = profileStorage.load(); 
             if (savedProfile != null) {
                 System.out.println("Welcome back, " + savedProfile.getName() + "!");
                 System.out.println("Saved GPA: " + String.format("%.2f", savedProfile.getGpa()));
@@ -156,16 +156,22 @@ public class PathLock {
 
     private static double promptForGpa(Scanner scanner) {
         while (true) {
-            System.out.print("Enter your GPA (2.0 to 5.0): ");
+            System.out.print("Enter your GPA (2.0 to 5.0) " +
+                    "(Enter 'y1s1' if you are in your first semester of study): ");
 
-            if (!scanner.hasNextLine()) {  // ← ADD THIS
+            if (!scanner.hasNextLine()) {  
                 throw new NoSuchElementException("No input provided for GPA.");
             }
 
             String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("y1s1")) {
+                return 0.0;
+            }
+            
             try {
                 double gpa = Double.parseDouble(input);
-                if (gpa < 2.0 || gpa > 5.0) {
+                if (Double.isNaN(gpa) || gpa < 2.0 || gpa > 5.0) {
                     System.out.println("GPA must be between 2.0 and 5.0.");
                     continue;
                 }

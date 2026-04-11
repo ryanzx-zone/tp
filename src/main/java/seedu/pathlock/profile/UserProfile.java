@@ -8,7 +8,7 @@ public class UserProfile {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty.");
         }
-        if (gpa < 2.0 || gpa > 5.0) {
+        if (gpa != 0.0 && (gpa < 2.0 || gpa > 5.0)) {
             throw new IllegalArgumentException("GPA must be between 2.0 and 5.0.");
         }
 
@@ -25,7 +25,9 @@ public class UserProfile {
     }
 
     public int getRecommendedMaxWorkload() {
-        if (gpa >= 4.5) {
+        if (gpa == 0.0) {  // y1s1 freshmen: 18–20 MCs workload
+            return 20;
+        } else if (gpa >= 4.5) {
             return 32;
         } else if (gpa >= 4.0) {
             return 28;

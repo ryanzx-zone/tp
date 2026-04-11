@@ -118,5 +118,10 @@ public class UserProfileTest {
         UserProfile profile = new UserProfile("Alice", 2.5);
         assertEquals(24, profile.getRecommendedMaxWorkload());
     }
-    
+
+    @Test
+    public void getRecommendedMaxWorkload_gpaZeroFreshman_returns20() {
+        UserProfile profile = new UserProfile("Alice", 0.0);
+        assertEquals(20, profile.getRecommendedMaxWorkload());
+    }
 }

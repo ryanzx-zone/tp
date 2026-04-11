@@ -90,7 +90,7 @@ public class HelpCommand extends Command {
     }
 
     private String normaliseTopic(String input) {
-        String trimmed = input.trim().toLowerCase();
+        String trimmed = input.trim().replaceAll("\\s+", " ").toLowerCase();
 
         switch (trimmed) {
         case "done":             
@@ -177,8 +177,8 @@ public class HelpCommand extends Command {
                         + "Example:\n"
                         + "  count\n\n"
                         + "Example output:\n"
-                        + "  Completed: 40/160 MCs\n"
-                        + "  Remaining: 120/160 MCs\n"
+                        + "  Completed: 40/160 MCs (25.0%)\n"
+                        + "  Remaining: 120/160 MCs (75.0%)\n"
                         + dash);
 
         helpMap.put("list completed",
@@ -192,6 +192,7 @@ public class HelpCommand extends Command {
                         + "Example:\n"
                         + "  list completed\n\n"
                         + "Example output:\n"
+                        + "  Completed modules:\n"
                         + "  1. CS1010\n"
                         + "  2. CS2113\n"
                         + dash);
@@ -207,6 +208,7 @@ public class HelpCommand extends Command {
                         + "Example:\n"
                         + "  list incomplete\n\n"
                         + "Example output:\n"
+                        + "  Incomplete modules:\n"
                         + "  1. CS2040C\n"
                         + "  2. EE2026\n"
                         + dash);
@@ -222,6 +224,7 @@ public class HelpCommand extends Command {
                         + "Example:\n"
                         + "  list needed\n\n"
                         + "Example output:\n"
+                        + "  Modules required for graduation:\n"
                         + "  1. CS1010\n"
                         + "  2. CS2040C\n"
                         + "  3. CS2103 OR CS2113\n"
@@ -264,11 +267,21 @@ public class HelpCommand extends Command {
                         + "Usage:\n"
                         + "  planner list\n\n"
                         + "Example output:\n"
-                        + "  Semester: 1\n"
-                        + "  CS1010\n"
-                        + "  Semester: 2\n"
-                        + "  CS1231\n"
-                        + "  ...\n"
+                        + "  +----------------------+----------------------+\n"
+                        + "  | Y1                   | Y2                   |\n"
+                        + "  +----------------------+----------------------+\n"
+                        + "  | S1: CS1010           | S1: CS2040C          |\n"
+                        + "  |----------------------|----------------------|\n"
+                        + "  | S2: CS1231           | S2: CS2103           |\n"
+                        + "  +----------------------+----------------------+\n"
+                        + "\n"
+                        + "  +----------------------+----------------------+\n"
+                        + "  | Y3                   | Y4                   |\n"
+                        + "  +----------------------+----------------------+\n"
+                        + "  | S1:                  | S1:                  |\n"
+                        + "  |----------------------|----------------------|\n"
+                        + "  | S2:                  | S2:                  |\n"
+                        + "  +----------------------+----------------------+\n"
                         + dash);
 
         helpMap.put("planner add",
