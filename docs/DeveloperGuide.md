@@ -45,13 +45,15 @@
     - [Target User Profile](#target-user-profile)
     - [Value Proposition](#value-proposition)
 
-9. [User Stories](#9-user-stories)
+9. [Planned Enhancements (V3)](#9-planned-enhancements-v3)
 
-10. [Non-Functional Requirements](#10-non-functional-requirements)
+10. [User Stories](#10-user-stories)
 
-11. [Glossary](#11-glossary)
+11. [Non-Functional Requirements](#11-non-functional-requirements)
 
-12. [Instructions for Manual Testing](#12-instructions-for-manual-testing)
+12. [Glossary](#12-glossary)
+
+13. [Instructions for Manual Testing](#13-instructions-for-manual-testing)
     - [Launch and First-Time Setup](#launch-and-first-time-setup)
     - [Returning User Login](#returning-user-login)
     - [Marking a Module as Done](#marking-a-module-as-done)
@@ -920,7 +922,17 @@ tracking completed modules, monitoring MC progress, and managing graduation requ
 database or internet connection.
 
 ---
-## 9. User Stories
+## 9. Planned Enhancements (V3)
+- Support dynamic planner structures (e.g., special terms, exchange semesters).
+
+- Introduce workload validation for special constraints (Y4S2 no workload restrictions, Internship Semester workload restriction).
+
+- Implement comparison between planner variations.
+
+- Implement profile editing capabilities (Name and GPA editing functions).
+
+---
+## 10. User Stories
 
 | Version | As a ...               | I want to ...                                            | So that I can ...                                                    |
 |---------|------------------------|----------------------------------------------------------|----------------------------------------------------------------------|
@@ -946,7 +958,7 @@ database or internet connection.
 | v2.0    | CEG student            | have my planner saved and loaded automatically           | retain my semester plan between sessions                             |
 
 ---
-## 10. Non-Functional Requirements
+## 11. Non-Functional Requirements
 
 1. Should work on any mainstream OS (Windows, macOS, Linux) with Java 17 or above installed.
 2. All data is stored locally and the application should work fully without internet connectivity.
@@ -957,7 +969,7 @@ database or internet connection.
 7. The codebase should follow object-oriented design principles taught in CS2113.
 
 ---
-## 11. Glossary
+## 12. Glossary
 
 * **Module** — A university course unit identified by a code (e.g. CS2113). Each module carries a fixed number of Modular Credits.
 * **MC (Modular Credits)** — A measure of the workload of a module. CEG students must complete 160 MCs to graduate.
@@ -974,7 +986,7 @@ database or internet connection.
 
 ---
 
-## 12. Instructions for manual testing
+## 13. Instructions for manual testing
 
 Given below are instructions to test the app manually. These instructions provide a starting point;
 testers are expected to do more exploratory testing.
