@@ -65,14 +65,13 @@ Given below are my contributions to the project.
   - **User Guide:** 
     - Wrote full documentation for `done` (both paths, all error messages, usage examples) and `remove` (success and not-found outputs).
   - **Developer Guide:** 
-    - Wrote the `done` command section (class diagram, two sequence
-      diagrams, design rationale), `remove` command section (sequence diagram, design
-      rationale), duplicate module check section, and the architecture overview with diagram.
+    - Include done and remove Command class Diagram
+    - Wrote the `done` command section (two sequence
+    diagrams, design rationale), `remove` command section (sequence diagram, design
+    rationale), duplicate module check section (sequence diagram), and the architecture overview with diagram.
   
 - **Community:**
   - Set up the initial package structure (`commands` and `module` packages) and wrote the
     foundational `Module.java` and `ModuleList.java` that all teammates built on top of.
   - Identified and fixed Checkstyle errors early and enforced CI hygiene (`Java CI / build`)
     across the team, keeping the main branch consistently buildable.
-  - Helped establish the NUS module code format rules now enforced consistently across the
-    codebase by `ModuleValidator`.
