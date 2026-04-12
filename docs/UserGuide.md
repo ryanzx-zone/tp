@@ -264,6 +264,8 @@ Completed: 40 / 160 MCs (25.0%)
 Incomplete: 120 MCs (75.0%)
 ```
 
+> **Note:** GEN/GEC modules (e.g. GEC1001, GEN2000) are not included in PathLock's built-in module list as they vary widely across pillars and cohorts. To track them towards your 160 MC graduation requirement, add them manually using `done MODULE_CODE /mc NUMBER` (e.g. `done GEC1001 /mc 4`).
+
 #### Viewing prerequisites : `prereq MODULE_CODE`
 
 Shows the prerequisites needed before taking a specified module. Only modules within the CEG curriculum are recognised.
@@ -387,6 +389,8 @@ Current workload for y1s1: 4 MCs
 =======================================================================
 ```
 > **Note:** modules and semesters are not cap sensitive, year and semester to be together i.e. `y2s2` not `y2 s2`
+
+> **Note:** PathLock does not enforce co-scheduling constraints between modules (e.g. full-time internship modules like EG3611A cannot be taken alongside regular daytime modules). Users should refer to official NUS module information for such scheduling restrictions when planning their semesters.
 #### Removing mods from planner : `planner remove`
 
 Allows the user to remove modules from the planner
@@ -453,6 +457,9 @@ CS2113 is not found in planner
 **Q: Can I add modules that are not in the CEG required list?**  
 **A**: Yes. Use `done MODULE_CODE /mc NUMBER` to add external with a custom MC value.
 
+**Q: Why are GEN/GEC modules not in the compulsory module list?**  
+**A**: GEN/GEC modules vary widely across pillars and cohorts, with no single fixed set of module codes. PathLock tracks core CEG modules that are common to all students. You can still track GEN/GEC modules towards your 160 MC graduation progress using `done MODULE_CODE /mc NUMBER` (e.g. `done GEC1001 /mc 4`).
+
 **Q: Is Path Lock case-sensitive?**  
 **A**: No. Module codes are case-insensitive.
 
@@ -463,6 +470,8 @@ CS2113 is not found in planner
 ## Known Issues
 
 1. **Profile is loaded from `data/profile.txt`** — If this file is deleted or corrupted, PathLock will prompt you to create a new profile on the next run.
+
+2. **No co-scheduling constraint checks** — The planner does not enforce module scheduling restrictions (e.g. full-time internship modules like EG3611A that cannot be taken with daytime modules). Users should verify scheduling compatibility via official NUS resources (e.g. NUSMods, EduRec) before finalising their plan.
 
 ---
 ## Command Summary
