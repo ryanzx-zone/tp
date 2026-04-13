@@ -139,7 +139,7 @@ Each storage class extends a common abstraction `Storage<T>`.
 
 The storage system follows a **generic abstraction pattern**:
 ```
-ModStorage, PlannerStorage and ProfileStorage all implements the smae method from Storage class
+ModStorage, PlannerStorage and ProfileStorage all implements the same method from Storage class
 ```
 Key design decisions:
 
@@ -217,6 +217,7 @@ Mod Load:
 
 Mod Save:
 ![Mod Save](Diagrams/SequenceDiagramModStorageSave.png)
+
 ---
 
 ##### Profile Storage: `ProfileStorage`
@@ -260,10 +261,11 @@ Username|GPA
 
 #### Sequence Diagram:
 
-save Profile
-![](Diagrams/SequenceDiagramProfileStorageSave.png)
-Load Profile
+Profile Load:
 ![](Diagrams/SequenceDiagramProfileStorageLoad.png)
+Profile Save:
+![](Diagrams/SequenceDiagramProfileStorageSave.png)
+
 
 ---
 
@@ -306,7 +308,7 @@ CS2040C|Y2S2|4
 1. Ensure directory exists
 2. Write each module as:
 ```
-ModuleCode|Year and Semester|Units
+ModuleCode|Semester|Units
 eg
 CS2113|y2s2|4
 ```
@@ -820,7 +822,7 @@ The command follows the standard execution pipeline:
 PathLock (Main) → Parser → ListPlannerCommand → AppState → PlannerList
 ```
 
-It then loops through the 2D array `course` stored in PlannerList and prints the moduleCode out.A
+It then loops through the 2D array `course` stored in PlannerList and prints the moduleCode out.
 
 #### Implementation
 
@@ -852,7 +854,7 @@ The diagram below shows the sequence of action upon the user inputting `planner 
 
 #### Overview
 
-The `planner add` command allows the User to add modules to the planner which can then be show with `planner list`
+The `planner add` command allows the User to add modules to the planner which can then be shown with `planner list`
 
 #### Design
 ```
@@ -869,12 +871,15 @@ Key design decisions:
 `Parser.parseCommand()` checks for the `planner` then `add`. If subsequent input is bare a `MissingCommandException` is thrown. Otherwise, the module code and semester is extracted and passed to the `AddToPlannerCommand` constructor.
 
 **Execution**
-1. `AddToPlannerCommand.execute()` retrieves `ModuleList` and `PlannerList` from `Appstate`
+1. `AddToPlannerCommand.execute()` retrieves `ModuleList` and `PlannerList` from `AppState`
 2. `moduleList.getModule(moduleCode)` retrieves Module based of `moduleCode`
 3. If module null, means moduleCode does not exist, `IllegalArgumentException` is thrown
 4. It sets `Module` semester attribute, if semester is of incorrect format `IllegalArgumentException` is thrown
 5. Executes `PlannerList.addModule(module)`
 6. It extracts semester, and inserts it into the respective array index of course
+7. The system computes the total workload (MCs) for the selected semester:
+    - If the workload is within the recommended limit, an `[INFO]` message is shown
+    - If the workload exceeds the recommended limit, a `[WARNING]` message is shown to alert the user
 
 #### Sequence Diagram
 
@@ -940,13 +945,81 @@ The diagram below shows the sequence of action upon the user inputting `planner 
 ![sequence diagram of planner edit](./Diagrams/seq_diag_planneredit.png)
 
 ---
-## 8. Product scope
+
+### `planner switch` Command Implementation
+
+#### Overview
+
+The `planner switch` command allows the user to switch between different planner variations stored under their profile.
+
+#### Design
+
+```
+PathLock → Parser → SwitchPlannerCommand → AppState → PlannerStorage
+```
+
+Key design decisions:
+- Each planner is stored as a separate file under `data/users/<username>/plans/`
+- Switching planners updates the active planner in `AppState`
+- PlannerStorage is reinitialised with the selected planner name
+
+#### Implementation
+
+**Parsing**
+`Parser.parseCommand()` detects `planner switch` and extracts the planner name.
+
+**Execution**
+1. `SwitchPlannerCommand.execute()` retrieves the current username from `AppState`
+2. It calls `AppState.switchPlanner(username, plannerName)`
+3. `AppState` creates a new `PlannerStorage` with the selected planner
+4. The planner data is loaded from file using `PlannerStorage.load()`
+5. The current `PlannerList` in `AppState` is updated
+6. A confirmation message is shown to the user indicating the active planner
+
+#### Sequence Diagram
+The diagram below shows the sequence of action upon the user inputting `planner switch plan2`
+
+![Sequence Diagram of planner switch](Diagrams/SequenceDiagramPlannerSwitch.png)
+---
+
+### `planner list plans` Command Implementation
+
+#### Overview
+
+The `planner list plans` command displays all saved planner variations available for the current user.
+
+#### Design
+```
+PathLock → Parser → ListPlannerPlansCommand → PlannerStorage
+```
+Key design decisions:
+- Planner files are stored as `.txt` files in the user's `plans` directory
+- The command retrieves planner names by scanning the directory
+
+#### Implementation
+
+**Parsing**
+`Parser.parseCommand()` detects `planner list plans`.
+
+**Execution**
+1. `ListPlannerPlansCommand.execute()` retrieves the current username
+2. It calls `PlannerStorage.listPlannerNames()`
+3. The method scans `data/users/<username>/plans/`
+4. All `.txt` filenames are extracted and converted into planner names
+5. The list is formatted and returned to the user
+
+#### Sequence Diagram
+The diagram below shows the sequence of action upon the user inputting `planner list plans`
+
+![](Diagrams/SequenceDiagramPlannerListPlans.png)
+---
+## 8. Product Scope
 ### Target user profile
 - Y1-Y4 Computer Engineering Undergraduate Students (JC path)
-- did not follow the recommended TimeTable
-- has a need to manage complex multi-year university pathways
-- can type fast
-- is reasonably comfortable using CLI apps
+- Did not follow the recommended TimeTable
+- Has a need to manage complex multi-year university pathways
+- Can type fast
+- Is reasonably comfortable using CLI apps
 
 ### Value proposition
 
@@ -1075,6 +1148,8 @@ Prerequisites: A profile for `TestUser` was created in a previous session.
 4. Test case: `done EX9999 /mc 13`
    - Expected: Error that MC cannot be greater than 12.
 
+5. Test case: `done EX9999 /mc 13`
+
 ### Removing a module
 
 Prerequisites: `CS1010` has been marked as done.
@@ -1165,6 +1240,41 @@ Prerequisites: `CS1010` is in the planner.
 
 2. Test case: `planner remove CS9999` (not in planner)
    - Expected: Error message.
+
+### Testing `planner list plans`
+
+1. Ensure user has multiple planners saved:
+    - `data/users/<username>/plans/plan1.txt`
+    - `data/users/<username>/plans/plan2.txt`
+
+2. Run command:
+```
+planner list plans
+```
+
+3. Expected:
+- All planner names (e.g. plan1, plan2) are displayed
+
+4. Edge case:
+- If no planners exist → empty list
+
+### Testing `planner switch`
+
+1. Ensure multiple planners exist:
+    - plan1.txt, plan2.txt
+
+2. Run command:
+```
+planner switch plan2
+```
+3. Expected:
+- Planner successfully switches to plan2
+- Planner data updates accordingly
+
+4. Edge case:
+- If planner does not exist → it will create a new plan with that name
+
+
 
 ### Switching users
 
