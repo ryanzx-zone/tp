@@ -172,7 +172,7 @@ Loaded plan: plan1
 ```
 
 ---
-### Switching to another user profile : `switch`
+### Switching to another user profile : `switch NAME`
 
 Switches the current session to a different user's profile, loading their saved modules and planner data.
 
