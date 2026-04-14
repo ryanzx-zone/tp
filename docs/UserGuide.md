@@ -12,7 +12,8 @@ PathLock is a **desktop app for planning your CEG modules**, optimised for use v
    - [Profile Creation](#profile-creation-)
      - [Creating or loading a profile at startup](#Creating-or-loading-a-profile-at-startup)
    - [Plan Selection](#plan-selection)
-     - [Switching to another user profile : `switch`](#Switching-to-another-user-profile--switch)
+     - [Loading a pre existing plan or creating a new plan1]()
+   - [Switching to another user profile : `switch NAME`](#Switching-to-another-user-profile--switch)
    - [List Commands](#list-commands)
      - [Listing completed modules: `list completed`](#listing-completed-modules--list-completed)
      - [Listing incomplete modules: `list incomplete`](#listing-incomplete-modules--list-incomplete)
@@ -140,7 +141,7 @@ Loaded plan: plan1
 ```
 ---
 
-### Plan Selection
+#### Plan Selection
 
 After inputting your name and GPA the program will check your profile 
 If the program detects that this is a new User with no plan yet it will create a default blank plan named 'plan1'
@@ -165,7 +166,7 @@ Loaded plan: plan1
 ```
 
 ---
-#### Switching to another user profile : `switch`
+### Switching to another user profile : `switch NAME`
 
 Switches the current session to a different user's profile, loading their saved modules and planner data.
 
