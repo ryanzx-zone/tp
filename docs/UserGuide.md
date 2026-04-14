@@ -449,6 +449,7 @@ Current workload for y1s1: 4 MCs
 > **Note:** modules and semesters are not cap sensitive, year and semester to be together i.e. `y2s2` not `y2 s2`
 
 > **Note:** PathLock does not enforce co-scheduling constraints between modules (e.g. full-time internship modules like EG3611A cannot be taken alongside regular daytime modules). Users should refer to official NUS module information for such scheduling restrictions when planning their semesters.
+
 ---
 #### Removing modules from planner : `planner remove`
 
