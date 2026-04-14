@@ -1121,7 +1121,7 @@ testers are expected to do more exploratory testing.
 3. Open a terminal, navigate to the folder containing the JAR, and run: `java -jar pathlock.jar`
 4. Expected: ASCII logo is displayed, followed by `Enter your name:` prompt.
 5. Enter a name (e.g. `TestUser`) and press Enter.
-6. Expected: Prompted for GPA with `Enter your GPA (2.0 to 5.0):`.
+6. Expected: Prompted for GPA with `Enter your GPA (2.0 to 5.0) (Enter 'y1s1' if you are in your first semester of study):`.
 7. Enter a valid GPA (e.g. `3.5`) and press Enter.
 8. Expected: Profile saved confirmation and recommended max workload displayed. `Pathlock awaits:` prompt appears.
 

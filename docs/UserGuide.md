@@ -117,12 +117,12 @@ If the name is not found in storage, the program creates a new profile with that
 
 If the name is found in storage, the program loads all saved data under that profile.
 
-> **Note:** Do not input "|" this character as it will mess up formatting in storage for any names.
+> **Note:** Do not input the vertical bar (pipe) character in any names, as it will mess up formatting in storage.
 
 **Example output (new profile):**
 ```
 Enter your name: russell
-Enter your GPA (2.0 to 5.0): 4.5
+Enter your GPA (2.0 to 5.0) (Enter 'y1s1' if you are in your first semester of study): 4.5
 Profile saved for russell.
 Recommended max semester workload: 32 MCs
 ```
