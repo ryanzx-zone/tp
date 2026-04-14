@@ -13,7 +13,7 @@ PathLock is a **desktop app for planning your CEG modules**, optimised for use v
      - [Creating or loading a profile at startup](#Creating-or-loading-a-profile-at-startup)
    - [Plan Selection](#plan-selection)
      - [Loading a pre existing plan or creating a new plan1]()
-   - [Switching to another user profile : `switch`](#Switching-to-another-user-profile--switch)
+   - [Switching to another user profile : `switch NAME`](#Switching-to-another-user-profile--switch)
    - [List Commands](#list-commands)
      - [Listing completed modules: `list completed`](#listing-completed-modules--list-completed)
      - [Listing incomplete modules: `list incomplete`](#listing-incomplete-modules--list-incomplete)
