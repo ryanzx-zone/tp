@@ -12,6 +12,7 @@ public class AppState {
     private PlannerStorage plannerStorage;
     private String activePlannerName;
 
+    //@@author Kailer811
     public AppState(ModuleList module, PlannerList planner, UserProfile profile,
                     PlannerStorage plannerStorage) {
         this.module = module;
@@ -57,4 +58,5 @@ public class AppState {
         this.plannerStorage = plannerStorage;
         this.activePlannerName = plannerStorage.getPlannerName();
     }
+    //@@author
 }

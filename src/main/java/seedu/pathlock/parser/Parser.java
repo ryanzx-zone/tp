@@ -69,6 +69,7 @@ public class Parser {
             return new SwitchUserCommand(username);
         }
         //trims out planner and reads subsequent command
+        //@@author Kailer811
         if (normalised.startsWith("planner")) {
             String subInput = trimmed.substring(7).trim();
             String subNormalised = subInput.toLowerCase();
@@ -109,6 +110,7 @@ public class Parser {
                 String moduleCode = subInput.substring(7).trim();
                 return new RemoveFromPlannerCommand(moduleCode);
             }
+            //@@author
             if (subNormalised.startsWith("list plans")) {
                 return new PlannerListCommand();
             }

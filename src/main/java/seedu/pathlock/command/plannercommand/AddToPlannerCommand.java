@@ -29,17 +29,19 @@ public class AddToPlannerCommand extends Command {
         if (original == null) {
             throw new IllegalArgumentException("\"" + moduleCode + "\" is not a recognised module.");
         }
-
+        //@@author Kailer811
         Module module = new Module(original.getModuleCode(), original.getModularCredits());
-
+        //@@author
         try {
             module.setSemester(semester);
         } catch (Exception e) {
             return e.getMessage();
         }
+        //@@author Kailer811
         if (planner.containsModule(moduleCode)) {
             throw new IllegalArgumentException(moduleCode + " is already in this plan");
         }
+        //@@author
         planner.addModule(module);
         try {
             appState.getPlannerStorage().save(planner);
